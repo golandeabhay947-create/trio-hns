@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
+import { submitDemoRequest } from "../lib/submitDemoRequest";
 
 const PERKS = [
   { icon: "bi-lightning-charge-fill", label: "30-Min Live Walkthrough", desc: "Tailored to your hospital workflow" },
@@ -20,15 +21,28 @@ export default function AppointmentSection() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [company, setCompany] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    setError("");
+
+    try {
+      await submitDemoRequest({
+        subject: "TRIO HIMS Demo Appointment Request",
+        formData,
+        honeyPot: company
+      });
       setSubmitted(true);
       try { confetti({ particleCount: 75, spread: 70, origin: { y: 0.6 } }); } catch (_) {}
-    }, 550);
+    } catch (err) {
+      setError("We could not send this demo request. Please try again or email golandeabhay45@gmail.com.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const resetForm = () => {
@@ -111,6 +125,17 @@ export default function AppointmentSection() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="demo-modern-form">
+                  <div className="demo-honeypot" aria-hidden="true">
+                    <label htmlFor="appointment-company">Company</label>
+                    <input
+                      id="appointment-company"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                    />
+                  </div>
                   <div className="demo-form-row">
                     <div className="demo-input-group">
                       <label className="demo-form-label">Full Name *</label>
@@ -202,6 +227,8 @@ export default function AppointmentSection() {
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     />
                   </div>
+
+                  {error ? <p className="demo-form-error" role="alert">{error}</p> : null}
 
                   <button type="submit" className="demo-submit-btn-obsidian" disabled={loading}>
                     {loading ? (

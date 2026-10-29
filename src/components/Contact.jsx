@@ -132,19 +132,23 @@ export default function Contact() {
                 </div>
 
                 {/* Compliance & Security Micro Badges */}
-                <div className="contact-trust-pill-strip">
+                <div className="contact-trust-pill-strip" role="group" aria-label="Compliance and readiness indicators">
                   <div className="contact-trust-item">
-                    <i className="bi bi-shield-check text-primary"></i>
+                    <span className="contact-trust-icon" aria-hidden="true">
+                      <i className="bi bi-shield-check"></i>
+                    </span>
                     <span>NABH Ready</span>
                   </div>
-                  <div className="contact-trust-sep">&bull;</div>
                   <div className="contact-trust-item">
-                    <i className="bi bi-lock-fill text-success"></i>
+                    <span className="contact-trust-icon" aria-hidden="true">
+                      <i className="bi bi-lock-fill"></i>
+                    </span>
                     <span>ISO 27001 Certified</span>
                   </div>
-                  <div className="contact-trust-sep">&bull;</div>
                   <div className="contact-trust-item">
-                    <i className="bi bi-activity text-info"></i>
+                    <span className="contact-trust-icon" aria-hidden="true">
+                      <i className="bi bi-activity"></i>
+                    </span>
                     <span>ABDM M1-M3</span>
                   </div>
                 </div>

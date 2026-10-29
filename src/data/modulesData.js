@@ -5,6 +5,7 @@ export const modulesData = [
     shortTitle: "Patient Registration (RADT)",
     subtitle: "Front Desk & Admissions",
     icon: "bx-user-plus",
+    image: "/assets/img/workflow/out-patient2.png",
     category: "Clinical & Front Desk",
     description: "Complete patient lifecycle management from entry to discharge with emergency handling.",
     features: [
@@ -48,6 +49,7 @@ export const modulesData = [
     shortTitle: "Doctor Consultation Desk",
     subtitle: "OPD & E-Prescriptions",
     icon: "bx-pulse",
+    image: "/assets/img/workflow/out-patient2.png",
     category: "Clinical & Doctors",
     description: "Electronic health records, doctor consultation desks, and e-prescriptions.",
     features: [
@@ -66,6 +68,7 @@ export const modulesData = [
     shortTitle: "Radiology (RIS & PACS)",
     subtitle: "Imaging, X-Ray & DICOM",
     icon: "bx-scan",
+    image: "/assets/img/workflow/radiology.png",
     category: "Diagnostics",
     description: "Complete radiology workflow, order processing, and PACS imaging integration.",
     features: [
@@ -104,6 +107,7 @@ export const modulesData = [
     shortTitle: "Laboratory (LIS)",
     subtitle: "Bi-directional Auto-Analyzers",
     icon: "bx-vial",
+    image: "/assets/img/workflow/laboratory.png",
     category: "Diagnostics",
     description: "End-to-end pathology workflow with machine interfacing and barcode tracking.",
     features: [
@@ -163,6 +167,7 @@ export const modulesData = [
     shortTitle: "Nursing Care Station",
     subtitle: "Vitals, MAR & Handover",
     icon: "bx-first-aid",
+    image: "/assets/img/workflow/in-patient.png",
     category: "Inpatient Care",
     description: "Ward administration, vitals charting, doctor order execution, and bed control.",
     features: [

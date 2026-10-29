@@ -12,6 +12,11 @@ function AnimatedMetricCard({ target, label, suffix = "+", isVisible, delayIndex
 
   useEffect(() => {
     if (!isVisible) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCount(target);
+      return undefined;
+    }
+
     let startTime = null;
     let animId;
     const duration = 2000; // 2.0s smooth exponential count
@@ -89,8 +94,8 @@ const SLIDES = [
     metricSub: 'Bi-directional LIS / HIS connection',
     statusBadge: 'Machine Sync < 50ms',
     statusDot: 'dot-purple',
-    themeColor: '#9333ea',
-    glowClass: 'aura-purple',
+    themeColor: '#ffc53d',
+    glowClass: 'aura-gold',
     videoSrc: '/assets/video/2.mp4',
     icon: 'bi-rocket-takeoff-fill',
     chips: ['Cloud & Web-Based', 'Machine Interfacing', 'Data Security', 'Bi-Directional LIS'],
@@ -111,8 +116,8 @@ const SLIDES = [
     metricSub: 'Zero billing leakage guarantee',
     statusBadge: 'Audit Status Zero-Leak',
     statusDot: 'dot-amber',
-    themeColor: '#d97706',
-    glowClass: 'aura-amber',
+    themeColor: '#f87820',
+    glowClass: 'aura-orange',
     videoSrc: '/assets/video/3.mp4',
     icon: 'bi-box-seam-fill',
     chips: ['KPI Analytics', 'Stop Revenue Leakage', 'Role-Based Security', 'Executive Dashboard'],
@@ -133,8 +138,8 @@ const SLIDES = [
     metricSub: 'Accelerated patient care turnaround',
     statusBadge: 'Auto-Pipeline Active',
     statusDot: 'dot-green',
-    themeColor: '#10b981',
-    glowClass: 'aura-green',
+    themeColor: '#ed1b24',
+    glowClass: 'aura-red',
     videoSrc: '/assets/video/4.mp4',
     icon: 'bi-plus-circle-fill',
     chips: ['Automate Tasks', 'Care Coordination', 'Data Accuracy', 'Instant EMR Access'],
@@ -148,15 +153,20 @@ const SLIDES = [
 
 export default function Counts() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const viewportRef = useRef(null);
-  const containerRef = useRef(null);
-  const activeIndexRef = useRef(0);
-  activeIndexRef.current = activeIndex;
-  const isScrollingRef = useRef(false);
-  const scrollTimeoutRef = useRef(null);
+  const [reduceMotion, setReduceMotion] = useState(() =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+  const slideRefs = useRef([]);
 
   const [statsVisible, setStatsVisible] = useState(false);
   const statsRef = useRef(null);
+
+  useEffect(() => {
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updatePreference = () => setReduceMotion(motionPreference.matches);
+    motionPreference.addEventListener('change', updatePreference);
+    return () => motionPreference.removeEventListener('change', updatePreference);
+  }, []);
 
   useEffect(() => {
     if (!statsRef.current) return;
@@ -173,97 +183,33 @@ export default function Counts() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const slides = slideRefs.current.filter(Boolean);
+    if (!slides.length) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSlide = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visibleSlide) {
+          setActiveIndex(Number(visibleSlide.target.dataset.slideIndex));
+        }
+      },
+      { threshold: [0.25, 0.5, 0.75], rootMargin: '-20% 0px -30% 0px' }
+    );
+
+    slides.forEach((slide) => observer.observe(slide));
+    return () => observer.disconnect();
+  }, []);
+
   const scrollToSlide = (index) => {
-    if (!viewportRef.current) return;
     const safeIndex = Math.max(0, Math.min(index, SLIDES.length - 1));
-    const targetTop = safeIndex * viewportRef.current.clientHeight;
-    viewportRef.current.scrollTo({
-      top: targetTop,
-      behavior: 'smooth'
-    });
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    slideRefs.current[safeIndex]?.scrollIntoView({ behavior, block: 'center' });
     setActiveIndex(safeIndex);
   };
-
-  // Handle internal scroll event of the mini-screen viewport
-  const handleScroll = () => {
-    if (!viewportRef.current) return;
-    const el = viewportRef.current;
-    const itemHeight = el.clientHeight;
-    if (itemHeight <= 0) return;
-    
-    const newIndex = Math.round(el.scrollTop / itemHeight);
-    if (newIndex >= 0 && newIndex < SLIDES.length && newIndex !== activeIndexRef.current) {
-      setActiveIndex(newIndex);
-    }
-  };
-
-  // Wheel handling: smooth step-by-step cycling inside mini-screen without Lenis hijacking
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const onWheel = (e) => {
-      const delta = e.deltaY;
-      if (Math.abs(delta) < 18) return;
-
-      const current = activeIndexRef.current;
-
-      // Scroll Down -> Next slide
-      if (delta > 0 && current < SLIDES.length - 1) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (isScrollingRef.current) return;
-        isScrollingRef.current = true;
-        scrollToSlide(current + 1);
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = setTimeout(() => {
-          isScrollingRef.current = false;
-        }, 500);
-      } 
-      // Scroll Up -> Previous slide
-      else if (delta < 0 && current > 0) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (isScrollingRef.current) return;
-        isScrollingRef.current = true;
-        scrollToSlide(current - 1);
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = setTimeout(() => {
-          isScrollingRef.current = false;
-        }, 500);
-      }
-      // If at boundary (current === 0 scrolling up or current === last scrolling down),
-      // allow default propagation so user can scroll to rest of page
-    };
-
-    // Touch swipe handling for mobile/tablet
-    let touchStartY = 0;
-    const onTouchStart = (e) => {
-      touchStartY = e.touches[0].clientY;
-    };
-    const onTouchEnd = (e) => {
-      const touchEndY = e.changedTouches[0].clientY;
-      const diff = touchStartY - touchEndY;
-      if (Math.abs(diff) < 40) return;
-      const current = activeIndexRef.current;
-      if (diff > 0 && current < SLIDES.length - 1) {
-        scrollToSlide(current + 1);
-      } else if (diff < 0 && current > 0) {
-        scrollToSlide(current - 1);
-      }
-    };
-
-    container.addEventListener('wheel', onWheel, { passive: false });
-    container.addEventListener('touchstart', onTouchStart, { passive: true });
-    container.addEventListener('touchend', onTouchEnd, { passive: true });
-
-    return () => {
-      container.removeEventListener('wheel', onWheel);
-      container.removeEventListener('touchstart', onTouchStart);
-      container.removeEventListener('touchend', onTouchEnd);
-      clearTimeout(scrollTimeoutRef.current);
-    };
-  }, []);
 
   return (
     <section id="counts" className="stats-strip-white">
@@ -273,14 +219,10 @@ export default function Counts() {
             Left: 1:1 Aspect Ratio Video Frame
             Right: Premium Liquid-Glass Info Panel
             ========================================================= */}
-        <div 
-          ref={containerRef}
-          className="mini-screen-container"
-          data-lenis-prevent="true"
-        >
+        <div className="mini-screen-container">
 
           {/* Minimal Floating Right Dots (Positioned cleanly outside inner box, inside container) */}
-          <div className="mini-screen-floating-dots" aria-label="Slide indicators">
+          <div id="why-us" className="mini-screen-floating-dots" aria-label="Why Choose TRIO topics">
             {SLIDES.map((s, idx) => (
               <button
                 key={s.id}
@@ -288,23 +230,20 @@ export default function Counts() {
                 onClick={() => scrollToSlide(idx)}
                 className={`floating-dot-pill ${activeIndex === idx ? 'pill-active' : ''}`}
                 title={s.category}
-                aria-label={`Slide ${idx + 1}: ${s.category}`}
+                aria-label={`Scroll to ${s.category}`}
+                aria-pressed={activeIndex === idx}
               >
-                <span className="dot-pill-num">{s.number}</span>
+                <span>{s.category}</span>
               </button>
             ))}
           </div>
 
-          {/* Internal Separate Scroll Viewport */}
-          <div 
-            ref={viewportRef} 
-            className="mini-screen-viewport" 
-            onScroll={handleScroll}
-            data-lenis-prevent="true"
-          >
+          {/* Natural document-flow sequence */}
+          <div className="mini-screen-viewport">
             {SLIDES.map((slide, idx) => (
               <div 
                 key={slide.id} 
+                ref={(element) => { slideRefs.current[idx] = element; }}
                 className={`mini-screen-slide ${slide.glowClass}`}
                 data-slide-index={idx}
               >
@@ -323,10 +262,11 @@ export default function Counts() {
                         <video
                           className="square-video-element"
                           src={slide.videoSrc}
-                          autoPlay
                           loop
                           muted
                           playsInline
+                          autoPlay={!reduceMotion}
+                          controls={reduceMotion}
                           preload="auto"
                         />
                       </div>
@@ -397,44 +337,6 @@ export default function Counts() {
         </div>
 
         {/* =========================================================
-            GOLDEN TRUST BADGES RIBBON (BELOW MINI SCREEN)
-            ========================================================= */}
-        <div className="trust-badges-ribbon">
-          <div className="trust-badge-item" title="10 Years Expertise">
-            <img 
-              src="/assets/img/1-removebg-preview.png" 
-              alt="10 Years Expertise" 
-              className="trust-badge-img" 
-              loading="lazy"
-            />
-          </div>
-          <div className="trust-badge-item" title="Deploy in 200+ Hospitals">
-            <img 
-              src="/assets/img/2-removebg-preview.png" 
-              alt="Deploy in 200+ Hospitals" 
-              className="trust-badge-img" 
-              loading="lazy"
-            />
-          </div>
-          <div className="trust-badge-item" title="27 Hospital Modules">
-            <img 
-              src="/assets/img/3-removebg-preview.png" 
-              alt="27 Hospital Modules" 
-              className="trust-badge-img" 
-              loading="lazy"
-            />
-          </div>
-          <div className="trust-badge-item" title="Excellent Service and Support System">
-            <img 
-              src="/assets/img/4-removebg-preview(4).png" 
-              alt="Excellent Service and Support System" 
-              className="trust-badge-img" 
-              loading="lazy"
-            />
-          </div>
-        </div>
-
-        {/* =========================================================
             PARALLEL EXECUTIVE SHOWCASE (PARALLEL TO MINI-SCREEN)
             Spans parallel width with generous left/right space and premium styling.
             ========================================================= */}
@@ -443,10 +345,6 @@ export default function Counts() {
             Spans parallel width with generous left/right space and premium styling.
             ========================================================= */}
         <div className="mini-screen-parallel-showcase">
-          <p className="parallel-showcase-desc">
-            <span className="desc-lead">Trio Corporation</span> provides healthcare information management software, <strong className="desc-highlight-brand">TRIO HIMS</strong>, tailored to the healthcare centre requirements. Our team of experts with enormous experience in the healthcare industry, wholeheartedly, dedicated to provide the <span className="desc-highlight-value">secure, reliable, and cost-effective IT solution</span> to simplify hospital’s operational tasks.
-          </p>
-
           <div className="quote-glass-stage-wrap">
             <div className="quote-callout-card quote-glass-card">
               <div className="liquid-glass-beam"></div>
@@ -457,9 +355,9 @@ export default function Counts() {
                     <path d="M0 16.8C0 7.5 6.2 1.9 15.4 0L17.2 3.8C10.8 5.3 8 8.4 7.7 12.5H15.4V28H0V16.8ZM20.6 16.8C20.6 7.5 26.8 1.9 36 0L37.8 3.8C31.4 5.3 28.6 8.4 28.3 12.5H36V28H20.6V16.8Z" fill="url(#premiumQuoteGradient)" />
                     <defs>
                       <linearGradient id="premiumQuoteGradient" x1="0" y1="0" x2="38" y2="28" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#1a73e8" />
-                        <stop offset="0.5" stopColor="#38bdf8" />
-                        <stop offset="1" stopColor="#06b6d4" />
+                        <stop stopColor="#ffc53d" />
+                        <stop offset="0.5" stopColor="#f87820" />
+                        <stop offset="1" stopColor="#ed1b24" />
                       </linearGradient>
                     </defs>
                   </svg>

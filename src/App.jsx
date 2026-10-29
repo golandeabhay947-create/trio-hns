@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Counts from './components/Counts';
 import TrustedBy from './components/TrustedBy';
+import CompanyIntro from './components/CompanyIntro';
+import KeyFeatures from './components/KeyFeatures';
 import Modules from './components/Modules';
 import AppointmentSection from './components/AppointmentSection';
 import Workflows from './components/Workflows';
@@ -13,32 +16,37 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import DemoModal from './components/DemoModal';
 import WhatsAppFloat from './components/WhatsAppFloat';
+import ModuleDetailPage from './components/ModuleDetailPage';
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     // 1. Initialize Lenis Buttery Smooth Momentum Scrolling
-    const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.2,
-      infinite: false,
-    });
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const lenis = prefersReducedMotion ? null : new Lenis({
+        duration: 1.15,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.2,
+        infinite: false,
+      });
 
     window.__lenis = lenis;
 
     let animId;
-    function raf(time) {
-      lenis.raf(time);
+    if (lenis) {
+      function raf(time) {
+        lenis.raf(time);
+        animId = requestAnimationFrame(raf);
+      }
       animId = requestAnimationFrame(raf);
     }
-    animId = requestAnimationFrame(raf);
 
     // 2. Adaptive Scroll Transition Handling
     const handleScroll = () => {
@@ -62,14 +70,19 @@ export default function App() {
       }
     };
 
-    lenis.on('scroll', handleScroll);
+    if (lenis) {
+      lenis.on('scroll', handleScroll);
+    } else {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
     window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
 
     return () => {
-      cancelAnimationFrame(animId);
-      lenis.destroy();
+      if (animId) cancelAnimationFrame(animId);
+      lenis?.destroy();
       window.__lenis = null;
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
@@ -84,54 +97,77 @@ export default function App() {
     }
   }, [isModalOpen]);
 
+  useEffect(() => {
+    if (location.hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [location.pathname, location.hash]);
+
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+    const hash = location.hash.replace('#', '');
+    if (!hash) return;
+
+    const scrollToHash = () => {
+      const element = document.getElementById(hash);
+      if (!element) return false;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (window.__lenis && !prefersReducedMotion) {
+        window.__lenis.scrollTo(element, { offset: -74, duration: 1.05 });
+      } else {
+        const offsetPosition = element.getBoundingClientRect().top + window.pageYOffset - 74;
+        window.scrollTo({ top: offsetPosition, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+      }
+      return true;
+    };
+
+    if (scrollToHash()) return undefined;
+    const retry = window.setTimeout(scrollToHash, 80);
+    return () => window.clearTimeout(retry);
+  }, [location.pathname, location.hash]);
+
   return (
     <div className="trio-app-root">
-      {/* 1. Header (Google Header, adaptive scroll) */}
       <Navbar scrolled={scrolled} onOpenModal={() => setIsModalOpen(true)} />
-      
+
       <main id="main">
-        {/* Dark Hero Stage with animated white cover */}
-        <Hero scrolled={scrolled} onOpenModal={() => setIsModalOpen(true)} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Hero scrolled={scrolled} onOpenModal={() => setIsModalOpen(true)} />
+                <Counts />
+                <section id="company-intro" className="company-intro-section">
+                  <div className="container">
+                    <CompanyIntro />
+                  </div>
+                </section>
+                <Modules onOpenModal={() => setIsModalOpen(true)} />
+                <TrustedBy />
+                <KeyFeatures />
+                <Workflows onOpenModal={() => setIsModalOpen(true)} />
+                <AppointmentSection />
+                <Testimonials />
+                <Faq />
+                <Contact />
+              </>
+            }
+          />
 
-        {/* =========================================================
-            CLEAN WHITE GOOGLE CANVAS (BELOW HERO BOUNDARY)
-            ========================================================= */}
-        
-        {/* Live Metrics Strip */}
-        <Counts />
-
-        {/* Cinematic 3D Floating Carousel */}
-        <TrustedBy />
-
-        {/* 18 Hospital Modules - Google Minimalist Catalog */}
-        <Modules onOpenModal={() => setIsModalOpen(true)} />
-
-        {/* Interactive HIMS Workflows */}
-        <Workflows onOpenModal={() => setIsModalOpen(true)} />
-
-        {/* Inline Appointment Booking - Google Material Form */}
-        <AppointmentSection />
-
-        {/* Doctor Testimonials - Google Stories */}
-        <Testimonials />
-
-        {/* Frequently Asked Questions */}
-        <Faq />
-
-        {/* Contact & Headquarters */}
-        <Contact />
+          <Route
+            path="/modules/:moduleId"
+            element={<ModuleDetailPage onOpenModal={() => setIsModalOpen(true)} />}
+          />
+        </Routes>
       </main>
 
-      {/* Global Clean Footer */}
       <Footer onOpenModal={() => setIsModalOpen(true)} />
 
-      {/* Interactive Demo Modal Dialog */}
-      <DemoModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <DemoModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
 
-      {/* Floating WhatsApp Action Button */}
       <WhatsAppFloat />
     </div>
   );

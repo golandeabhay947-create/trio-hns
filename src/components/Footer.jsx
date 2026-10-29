@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Footer({ onOpenModal }) {
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -54,12 +55,12 @@ export default function Footer({ onOpenModal }) {
           <div className="col-lg-2 col-md-6 col-6">
             <h6>Navigation</h6>
             <ul>
-              <li><a href="#hero">Home</a></li>
-              <li><a href="#why-us">Why Us</a></li>
-              <li><a href="#modules">18 Modules</a></li>
-              <li><a href="#workflows">Workflows</a></li>
-              <li><a href="#testimonials">Testimonials</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><Link to="/#hero">Home</Link></li>
+              <li><Link to="/#counts">Why Us</Link></li>
+              <li><Link to="/#modules">18 Modules</Link></li>
+              <li><Link to="/#workflows">Workflows</Link></li>
+              <li><Link to="/#testimonials">Testimonials</Link></li>
+              <li><Link to="/#contact">Contact</Link></li>
             </ul>
           </div>
 
@@ -67,12 +68,12 @@ export default function Footer({ onOpenModal }) {
           <div className="col-lg-3 col-md-6 col-6">
             <h6>Core Modules</h6>
             <ul>
-              <li><a href="#modules">RADT (Patient Intake)</a></li>
-              <li><a href="#modules">Billing Cash Counter</a></li>
-              <li><a href="#modules">EMR & Doctor Desk</a></li>
-              <li><a href="#modules">LIS Pathology & Analyzers</a></li>
-              <li><a href="#modules">RIS Radiology & PACS</a></li>
-              <li><a href="#modules">OT & Surgery Management</a></li>
+              <li><Link to="/modules/1">RADT (Patient Intake)</Link></li>
+              <li><Link to="/modules/2">Billing Cash Counter</Link></li>
+              <li><Link to="/modules/5">EMR & Doctor Desk</Link></li>
+              <li><Link to="/modules/6">LIS Pathology & Analyzers</Link></li>
+              <li><Link to="/modules/4">RIS Radiology & PACS</Link></li>
+              <li><Link to="/modules/15">OT & Surgery Management</Link></li>
             </ul>
           </div>
 

@@ -7,84 +7,59 @@ const PARTNERS = [
     name: 'SSD Hospital',
     type: 'Sai Snehdeep Hospital',
     logo: '/assets/img/ssd.jpeg',
-    accent: '#8b5cf6'
+    accent: '#f87820'
   },
   {
     id: 'gsmc',
     name: 'Government S.M.C. Hospital',
     type: 'Medical College & Hospital',
     logo: '/assets/img/Logo_gsmc_my_creation.png',
-    accent: '#38bdf8'
+    accent: '#ffc53d'
   },
   {
     id: 'lifeline',
     name: 'Lifeline Hospital',
     type: 'Multi-Speciality Centre',
     logo: '/assets/img/lifeline.jpeg',
-    accent: '#10b981'
+    accent: '#ed1b24'
   },
   {
     id: 'queens',
     name: 'Queens Hospital',
     type: 'Super Speciality Institute',
     logo: '/assets/img/Quuens%20logo.png',
-    accent: '#a855f7'
+    accent: '#f87820'
   },
   {
     id: 'samarth-main',
     name: 'Shri Swami Samarth Hospital',
     type: 'NABH Accredited Hospital',
-    logo: '/assets/img/logoMain.jpg',
-    accent: '#f59e0b'
+    accent: '#ffc53d'
   },
   {
     id: 'samarth-heart',
     name: 'Shri Swami Samarth Heart Care',
     type: 'Cardiac Sciences Institute',
-    logo: '/assets/img/WhatsApp%20Image%202022-12-28%20at%209.16.32%20PM.jpeg',
-    accent: '#ef4444'
+    accent: '#ed1b24'
   },
   {
     id: 'samarth-care',
     name: 'Shri Swami Samarth Care',
     type: 'Critical & Emergency Care',
-    logo: '/assets/img/Logo%20(1).png',
-    accent: '#06b6d4'
+    accent: '#f87820'
   },
   {
     id: 'kedarnath',
     name: 'Kedarnath Hospital',
     type: 'Advanced Trauma Care',
     logo: '/assets/img/kedarnathlogo.jpg',
-    accent: '#3b82f6'
+    accent: '#ed1b24'
   },
   {
     id: 'sunrise',
     name: 'Sunrise Super Speciality Hospital',
     type: 'Tertiary Care Hospital',
-    logo: '/assets/img/sunriseHospital.webp',
-    accent: '#ec4899'
-  },
-  {
-    id: 'apex-care',
-    name: 'Apex Clinical Network',
-    type: 'Regional Healthcare Chain',
-    icon: 'hospital',
-    accent: '#14b8a6'
-  },
-  {
-    id: 'metro-clinical',
-    name: 'Metro Health Institute',
-    type: 'Research & Diagnostics',
-    icon: 'pulse',
-    accent: '#6366f1'
-  },
-  {
-    id: 'global-care',
-    name: 'Global Care Multispeciality',
-    type: 'International Clinical Center',
-    icon: 'shield',
-    accent: '#22c55e'
+    accent: '#f87820'
   }
 ];
 
@@ -113,6 +88,7 @@ function createCardTexture(partner) {
   const ctx = canvas.getContext('2d');
 
   const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
   texture.generateMipmaps = true;
   texture.minFilter = THREE.LinearMipmapLinearFilter;
   texture.magFilter = THREE.LinearFilter;
@@ -124,7 +100,7 @@ function createCardTexture(partner) {
 
     // 1. Soft Ambient Floating Shadow Under Glass Card (Realistic depth, subtle elevation)
     ctx.save();
-    ctx.shadowColor = 'rgba(15, 23, 42, 0.08)';
+    ctx.shadowColor = 'rgba(248, 120, 32, 0.12)';
     ctx.shadowBlur = 28;
     ctx.shadowOffsetY = 12;
     ctx.fillStyle = '#ffffff';
@@ -141,22 +117,21 @@ function createCardTexture(partner) {
     drawRoundedRect(ctx, 16, 16, 768, 448, 28);
     ctx.fill();
 
-    // 3. Subtle Specular Glass Sheen Reflection (Top highlight without excessive glow)
+    // 3. Subtle Specular Glass Sheen Reflection (kept below the logo area)
     ctx.save();
-    const sheenGrad = ctx.createLinearGradient(16, 16, 16, 210);
-    sheenGrad.addColorStop(0, 'rgba(255, 255, 255, 0.70)');
-    sheenGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.18)');
+    const sheenGrad = ctx.createLinearGradient(16, 16, 16, 88);
+    sheenGrad.addColorStop(0, 'rgba(255, 255, 255, 0.28)');
     sheenGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
     ctx.fillStyle = sheenGrad;
-    drawRoundedRect(ctx, 16, 16, 768, 190, 28);
+    drawRoundedRect(ctx, 16, 16, 768, 72, 28);
     ctx.fill();
     ctx.restore();
 
     // 4. Delicate Crisp Glass Border (Refined edge highlights)
     const borderGrad = ctx.createLinearGradient(16, 16, 784, 464);
-    borderGrad.addColorStop(0, 'rgba(226, 232, 240, 0.95)');
-    borderGrad.addColorStop(0.5, 'rgba(241, 245, 249, 0.85)');
-    borderGrad.addColorStop(1, 'rgba(203, 213, 225, 0.9)');
+    borderGrad.addColorStop(0, 'rgba(255, 197, 61, 0.75)');
+    borderGrad.addColorStop(0.5, 'rgba(248, 120, 32, 0.32)');
+    borderGrad.addColorStop(1, 'rgba(237, 27, 36, 0.52)');
     ctx.strokeStyle = borderGrad;
     ctx.lineWidth = 1.5;
     drawRoundedRect(ctx, 16, 16, 768, 448, 28);
@@ -255,6 +230,7 @@ export default function TrustedBy() {
   const canvasRef = useRef(null);
   const sectionRef = useRef(null);
   const [animationPhase, setAnimationPhase] = useState('idle'); // 'idle' | 'bouncing' | 'loaded'
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -262,7 +238,6 @@ export default function TrustedBy() {
     if (!container || !canvas) return;
 
     // Check user preference for reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let autoRotate = !prefersReducedMotion;
 
     // Scene Setup: Transparent background blending seamlessly with page
@@ -297,7 +272,7 @@ export default function TrustedBy() {
     // Card width is 1.68 units. Gap is ~0.32 units (clean, elegant separation without overlap).
     const radius = 3.95;
     const count = PARTNERS.length;
-    const cardGeometry = new THREE.PlaneGeometry(1.68, 1.02);
+    const cardGeometry = new THREE.PlaneGeometry(1.95, 1.16);
     const texturesToDispose = [];
     const materialsToDispose = [];
     const meshes = [];
@@ -332,6 +307,10 @@ export default function TrustedBy() {
     let pointerStartX = 0;
     let previousPointerX = 0;
     let isHovered = false;
+    let hoveredMesh = null;
+    let hasPointerPosition = false;
+    const pointer = new THREE.Vector2();
+    const raycaster = new THREE.Raycaster();
 
     // Pointer Event Listeners for Interactive Drag/Swipe
     const onPointerDown = (e) => {
@@ -353,6 +332,13 @@ export default function TrustedBy() {
       dragVelocity = deltaX * sensitivity;
     };
 
+    const onCanvasPointerMove = (e) => {
+      const bounds = canvas.getBoundingClientRect();
+      pointer.x = ((e.clientX - bounds.left) / bounds.width) * 2 - 1;
+      pointer.y = -((e.clientY - bounds.top) / bounds.height) * 2 + 1;
+      hasPointerPosition = true;
+    };
+
     const onPointerUp = () => {
       if (!isDragging) return;
       isDragging = false;
@@ -366,12 +352,15 @@ export default function TrustedBy() {
     const onMouseLeave = () => {
       isHovered = false;
       isDragging = false;
+      hasPointerPosition = false;
+      hoveredMesh = null;
       canvas.style.cursor = 'grab';
     };
 
     canvas.addEventListener('mousedown', onPointerDown);
     window.addEventListener('mousemove', onPointerMove);
     window.addEventListener('mouseup', onPointerUp);
+    canvas.addEventListener('mousemove', onCanvasPointerMove);
 
     canvas.addEventListener('touchstart', onPointerDown, { passive: true });
     window.addEventListener('touchmove', onPointerMove, { passive: true });
@@ -383,8 +372,8 @@ export default function TrustedBy() {
     // Animation Loop with Visibility & Intersection Observation
     let animId;
     let isVisibleOnScreen = true;
-    let isBouncing = false;
-    let bounceStartTime = 0;
+    let isBouncing = prefersReducedMotion;
+    let bounceStartTime = prefersReducedMotion ? performance.now() - 1600 : 0;
 
     window.__triggerTrustedBounce = () => {
       isBouncing = true;
@@ -445,31 +434,32 @@ export default function TrustedBy() {
 
       ringGroup.rotation.y = rotationY;
 
+      if (isHovered && hasPointerPosition && !isDragging) {
+        raycaster.setFromCamera(pointer, camera);
+        hoveredMesh = raycaster.intersectObjects(meshes, false)[0]?.object || null;
+      } else {
+        hoveredMesh = null;
+      }
+
       const time = performance.now() * 0.001;
       meshes.forEach((mesh, idx) => {
         // Subtle weightless organic floating wave
         mesh.position.y = Math.sin(time * 1.4 + idx * 0.52) * 0.04;
 
-        mesh.getWorldPosition(worldPos);
-        // Normalized depth from camera (-radius to +radius)
-        const depthFactor = (worldPos.z - (-radius)) / (2 * radius);
-        
         // Center Card Prominence (gentle 1.08x scaling at front center)
+        mesh.getWorldPosition(worldPos);
         const frontness = Math.max(0, worldPos.z / radius);
         const centerProminence = Math.pow(frontness, 3.0);
-        const cardScale = 1.0 + 0.08 * centerProminence;
+        const hoverTarget = !prefersReducedMotion && mesh === hoveredMesh ? 0.035 : 0;
+        mesh.userData.hoverScale = THREE.MathUtils.lerp(mesh.userData.hoverScale || 0, hoverTarget, 0.18);
+        const cardScale = 1.0 + 0.08 * centerProminence + mesh.userData.hoverScale;
         mesh.scale.set(cardScale, cardScale, 1);
 
-        // Crisp, clearly visible cards: front and sides stay fully opaque (1.0).
-        // Only cards cycling through the deep background fade out gently so they don't visually clash.
-        let opacity = 1.0;
-        if (depthFactor < 0.38) {
-          opacity = Math.max(0, (depthFactor - 0.12) / 0.26);
+        if (mesh === hoveredMesh) {
+          mesh.material.color.setRGB(1, 0.94, 0.86);
+        } else {
+          mesh.material.color.setRGB(1, 1, 1);
         }
-        mesh.material.opacity = opacity;
-
-        // True vibrant original hospital colors (no tone dimming)
-        mesh.material.color.setRGB(1, 1, 1);
       });
 
       renderer.render(scene, camera);
@@ -506,6 +496,7 @@ export default function TrustedBy() {
       canvas.removeEventListener('mousedown', onPointerDown);
       window.removeEventListener('mousemove', onPointerMove);
       window.removeEventListener('mouseup', onPointerUp);
+      canvas.removeEventListener('mousemove', onCanvasPointerMove);
 
       canvas.removeEventListener('touchstart', onPointerDown);
       window.removeEventListener('touchmove', onPointerMove);
@@ -528,14 +519,18 @@ export default function TrustedBy() {
     const scrollObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setAnimationPhase('bouncing');
-          if (window.__triggerTrustedBounce) {
-            window.__triggerTrustedBounce();
-          }
-
-          setTimeout(() => {
+          if (prefersReducedMotion) {
             setAnimationPhase('loaded');
-          }, 1500);
+          } else {
+            setAnimationPhase('bouncing');
+            if (window.__triggerTrustedBounce) {
+              window.__triggerTrustedBounce();
+            }
+
+            setTimeout(() => {
+              setAnimationPhase('loaded');
+            }, 1500);
+          }
 
           scrollObserver.disconnect();
         }
@@ -573,8 +568,6 @@ export default function TrustedBy() {
             ref={containerRef} 
             className={`trusted-3d-stage ${animationPhase === 'bouncing' || animationPhase === 'loaded' ? 'boxes-bouncing' : ''}`}
           >
-            <div className="trusted-stage-vignette left" aria-hidden="true"></div>
-            <div className="trusted-stage-vignette right" aria-hidden="true"></div>
             <canvas 
               ref={canvasRef} 
               className="trusted-three-canvas" 

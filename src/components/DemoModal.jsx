@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
+import { submitDemoRequest } from '../lib/submitDemoRequest';
 
 export default function DemoModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -8,17 +9,25 @@ export default function DemoModal({ isOpen, onClose }) {
     phone: '',
     message: ''
   });
+  const [company, setCompany] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
+    setError('');
 
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await submitDemoRequest({
+        subject: 'TRIO HIMS Demo Request',
+        formData,
+        honeyPot: company
+      });
       setSubmitted(true);
       try {
         confetti({
@@ -27,11 +36,17 @@ export default function DemoModal({ isOpen, onClose }) {
           origin: { y: 0.5 }
         });
       } catch (err) {}
-    }, 550);
+    } catch (err) {
+      setError('We could not send this demo request. Please try again or email golandeabhay45@gmail.com.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClose = () => {
     setSubmitted(false);
+    setError('');
+    setLoading(false);
     onClose();
   };
 
@@ -83,8 +98,19 @@ export default function DemoModal({ isOpen, onClose }) {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="modal-form-layout">
+          <form onSubmit={handleSubmit} className="modal-form-layout" noValidate={false}>
             <div className="modal-body-google">
+              <div className="demo-honeypot" aria-hidden="true">
+                <label htmlFor="demo-company">Company</label>
+                <input
+                  id="demo-company"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                />
+              </div>
               {/* Header Preview Showcase Card - Fully Visible Image */}
               <div className="modal-banner-card">
                 <img 
@@ -175,6 +201,7 @@ export default function DemoModal({ isOpen, onClose }) {
                   </div>
                 </div>
               </div>
+              {error ? <p className="demo-form-error" role="alert">{error}</p> : null}
             </div>
 
             {/* Actions Footer - Always Visible & Pinned */}
