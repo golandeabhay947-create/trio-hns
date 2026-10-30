@@ -55,12 +55,15 @@ export default function Footer({ onOpenModal }) {
           <div className="col-lg-2 col-md-6 col-6">
             <h6>Navigation</h6>
             <ul>
-              <li><Link to="/#hero">Home</Link></li>
-              <li><Link to="/#counts">Why Us</Link></li>
-              <li><Link to="/#modules">18 Modules</Link></li>
-              <li><Link to="/#workflows">Workflows</Link></li>
-              <li><Link to="/#testimonials">Testimonials</Link></li>
-              <li><Link to="/#contact">Contact</Link></li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/why-choose-trio">Why Us</Link></li>
+              <li><Link to="/hospital-modules">Hospital Modules</Link></li>
+              <li><Link to="/trusted-by">Trusted By</Link></li>
+              <li><Link to="/key-features">Key Features</Link></li>
+              <li><Link to="/workflows">Workflows</Link></li>
+              <li><Link to="/testimonials">Testimonials</Link></li>
+              <li><Link to="/faq">FAQ</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
 

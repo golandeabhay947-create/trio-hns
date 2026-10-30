@@ -36,7 +36,7 @@ export default function ModuleDetailPage({ onOpenModal }) {
     return (
       <section className="module-detail-page">
         <div className="container module-detail-shell">
-          <Link to="/#modules" className="btn btn-google-outline module-detail-back-btn">
+          <Link to="/hospital-modules" className="btn btn-google-outline module-detail-back-btn">
             <i className="bi bi-arrow-left me-2" aria-hidden="true"></i>
             Back to Hospital Modules
           </Link>
@@ -55,7 +55,7 @@ export default function ModuleDetailPage({ onOpenModal }) {
     <section className="module-detail-page">
       <div className="container module-detail-shell">
         <div className="module-detail-topbar">
-          <Link to="/#modules" className="btn btn-google-outline module-detail-back-btn">
+          <Link to="/hospital-modules" className="btn btn-google-outline module-detail-back-btn">
             <i className="bi bi-arrow-left me-2" aria-hidden="true"></i>
             Back to Hospital Modules
           </Link>
@@ -150,7 +150,7 @@ export default function ModuleDetailPage({ onOpenModal }) {
         </article>
 
         <div className="module-detail-footer-actions">
-          <Link to="/#modules" className="btn btn-google-outline">
+          <Link to="/hospital-modules" className="btn btn-google-outline">
             <i className="bi bi-grid me-2" aria-hidden="true"></i>
             Back to Hospital Modules
           </Link>

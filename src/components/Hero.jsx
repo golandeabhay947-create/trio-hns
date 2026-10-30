@@ -9,9 +9,8 @@ import {
   TRIO_WHATSAPP_URL
 } from '../data/contactDetails';
 
-const HEADING_LINE_1 = 'The Intelligence Behind';
-const HEADING_LINE_2 = 'Modern Hospitals';
-const HOSPITAL_WORD_START = 'Modern '.length;
+const HEADING_LINE_1 = 'Powering Smarter Hospitals.';
+const HEADING_LINE_2 = 'Transforming Healthcare.';
 
 export default function Hero({ onOpenModal, scrolled }) {
   const [text1, setText1] = useState('');
@@ -98,26 +97,23 @@ export default function Hero({ onOpenModal, scrolled }) {
 
       <div className="hero-editorial-stage">
         <div className="hero-left-mid-block">
-          <h1 className="hero-main-heading">
+          <p className="hero-eyebrow">
+            TRIO HIMS <span aria-hidden="true">·</span> HOSPITAL MANAGEMENT SOFTWARE
+          </p>
+
+          <h1 className="hero-main-heading" aria-label={`${HEADING_LINE_1} ${HEADING_LINE_2}`}>
             <span className="hero-typography-line hero-line-intelligence">
               <span>{text1}</span>
               {activeStep === 1 && <span className="type-caret" aria-hidden="true" />}
             </span>
             <span className="hero-typography-line hero-line-modern">
-              <span>
-                {text2.length > HOSPITAL_WORD_START ? (
-                  <>
-                    {text2.slice(0, HOSPITAL_WORD_START)}
-                    <span className="hero-hospital-word">{text2.slice(HOSPITAL_WORD_START)}</span>
-                  </>
-                ) : text2}
-              </span>
+              <span className="hero-line-highlight">{text2}</span>
               {activeStep === 2 && <span className="type-caret" aria-hidden="true" />}
             </span>
           </h1>
 
           <p className="hero-supporting-copy">
-            TRIO HIMS provides healthcare information management software tailored to healthcare centre requirements, helping simplify hospital operational tasks.
+            Simplify every aspect of hospital management with TRIO HIMS, an integrated healthcare information management system designed to connect departments, streamline workflows, and bring essential operations into one platform.
           </p>
 
           <div className={`hero-cta-btn-wrap ${buttonVisible ? 'visible' : ''}`}>
@@ -130,12 +126,12 @@ export default function Hero({ onOpenModal, scrolled }) {
               <span className="btn-text">Book a Free Demo</span>
               <i className="bi bi-arrow-right btn-arrow" aria-hidden="true"></i>
             </button>
-            <Link to="/#modules" className="hero-btn-secondary">
+            <Link to="/hospital-modules" className="hero-btn-secondary">
               Explore Modules
               <i className="bi bi-grid-3x3-gap" aria-hidden="true"></i>
             </Link>
             <Link
-              to="/#testimonials"
+              to="/testimonials"
               className="hero-social-proof"
               aria-label="Read clinician testimonials; TRIO HIMS is used by more than 200 hospitals"
             >

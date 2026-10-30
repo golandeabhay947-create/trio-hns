@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 
-export default function Contact() {
+export default function Contact({ onSubmitRequest }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,10 +12,30 @@ export default function Contact() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    if (onSubmitRequest) {
+      setSubmitError('');
+      try {
+        await onSubmitRequest({
+          subject: `TRIO HIMS enquiry: ${formData.subject}`,
+          formData,
+        });
+        setSubmitted(true);
+        try {
+          confetti({ particleCount: 65, spread: 70, origin: { y: 0.65 } });
+        } catch (err) {}
+      } catch (err) {
+        setSubmitError('We could not send your enquiry. Please try again or email info@triocorporation.in.');
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
 
     setTimeout(() => {
       setLoading(false);
@@ -32,6 +52,7 @@ export default function Contact() {
 
   const handleReset = () => {
     setSubmitted(false);
+    setSubmitError('');
     setFormData({
       name: '',
       email: '',
@@ -285,6 +306,8 @@ export default function Contact() {
                       </div>
                     </div>
                   </div>
+
+                  {submitError ? <p className="home-contact-form-error" role="alert">{submitError}</p> : null}
 
                   {/* Form Footer Action */}
                   <div className="contact-form-actions">

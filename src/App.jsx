@@ -2,26 +2,29 @@ import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Counts from './components/Counts';
-import TrustedBy from './components/TrustedBy';
-import CompanyIntro from './components/CompanyIntro';
-import KeyFeatures from './components/KeyFeatures';
-import Modules from './components/Modules';
-import AppointmentSection from './components/AppointmentSection';
-import Workflows from './components/Workflows';
-import Faq from './components/Faq';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
+import {
+  HomePage,
+  WhyChoosePage,
+  HospitalModulesPage,
+  TrustedByPage,
+  KeyFeaturesPage,
+  WorkflowsPage,
+  TestimonialsPage,
+  FaqPage,
+  ContactPage,
+} from './pages/DedicatedPages';
 import Footer from './components/Footer';
 import DemoModal from './components/DemoModal';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import ModuleDetailPage from './components/ModuleDetailPage';
+import TrustedBy from './components/TrustedBy';
+import useScrollReveal from './lib/useScrollReveal';
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  useScrollReveal(location.pathname);
 
   useEffect(() => {
     // 1. Initialize Lenis Buttery Smooth Momentum Scrolling
@@ -103,6 +106,53 @@ export default function App() {
   }, [location.pathname, location.hash]);
 
   useEffect(() => {
+    const pageMetadata = {
+      '/': {
+        title: 'TRIO - Hospital Management System',
+        description: 'TRIO HIMS brings hospital information and operational workflows together in an integrated healthcare management system.',
+      },
+      '/why-choose-trio': {
+        title: 'Why Choose TRIO | TRIO HIMS',
+        description: 'Explore TRIO HIMS benefits, product information, and the content behind its integrated hospital management approach.',
+      },
+      '/hospital-modules': {
+        title: 'Hospital Modules | TRIO HIMS',
+        description: 'Explore the hospital modules available in TRIO HIMS and open module previews and details.',
+      },
+      '/trusted-by': {
+        title: 'Trusted By | TRIO HIMS',
+        description: 'View the partner and organization showcase featured on the TRIO HIMS website.',
+      },
+      '/key-features': {
+        title: 'Key Features | TRIO HIMS',
+        description: 'See how TRIO HIMS connects hospital modules and workflows across departments.',
+      },
+      '/workflows': {
+        title: 'HIMS Work Flows | TRIO HIMS',
+        description: 'Explore TRIO HIMS workflow diagrams for outpatient, inpatient, diagnostic, and administrative processes.',
+      },
+      '/testimonials': {
+        title: 'Testimonials | TRIO HIMS',
+        description: 'Read the clinician testimonials featured on the TRIO HIMS website.',
+      },
+      '/faq': {
+        title: 'Frequently Asked Questions | TRIO HIMS',
+        description: 'Find answers to common questions about TRIO HIMS.',
+      },
+      '/contact': {
+        title: 'Contact TRIO HIMS',
+        description: 'Contact TRIO HIMS by phone, email, or enquiry form, or request a product demonstration.',
+      },
+    };
+    const metadata = pageMetadata[location.pathname] || {
+      title: 'TRIO HIMS',
+      description: 'TRIO hospital information management system.',
+    };
+    document.title = metadata.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', metadata.description);
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (location.pathname !== '/') return;
     const hash = location.hash.replace('#', '');
     if (!hash) return;
@@ -135,30 +185,34 @@ export default function App() {
             path="/"
             element={
               <>
-                <Hero scrolled={scrolled} onOpenModal={() => setIsModalOpen(true)} />
-                <Counts />
-                <section id="company-intro" className="company-intro-section">
-                  <div className="container">
-                    <CompanyIntro />
-                  </div>
-                </section>
-                <Modules onOpenModal={() => setIsModalOpen(true)} />
-                <TrustedBy />
-                <KeyFeatures />
-                <Workflows onOpenModal={() => setIsModalOpen(true)} />
-                <AppointmentSection />
-                <Testimonials />
-                <Faq />
-                <Contact />
+                <HomePage
+                  scrolled={scrolled}
+                  onOpenModal={() => setIsModalOpen(true)}
+                />
               </>
             }
           />
 
+          <Route path="/why-choose-trio" element={<WhyChoosePage />} />
+          <Route
+            path="/hospital-modules"
+            element={<HospitalModulesPage onOpenModal={() => setIsModalOpen(true)} />}
+          />
+          <Route path="/trusted-by" element={<TrustedByPage />} />
+          <Route path="/key-features" element={<KeyFeaturesPage />} />
+          <Route
+            path="/workflows"
+            element={<WorkflowsPage onOpenModal={() => setIsModalOpen(true)} />}
+          />
+          <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route
             path="/modules/:moduleId"
             element={<ModuleDetailPage onOpenModal={() => setIsModalOpen(true)} />}
           />
         </Routes>
+        {location.pathname !== '/' && location.pathname !== '/trusted-by' ? <TrustedBy /> : null}
       </main>
 
       <Footer onOpenModal={() => setIsModalOpen(true)} />

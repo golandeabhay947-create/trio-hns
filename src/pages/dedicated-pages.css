@@ -1,0 +1,43 @@
+.dedicated-page-header {
+  padding: 112px 0 0;
+  background: #ffffff;
+}
+
+.dedicated-page-header .google-modules-header {
+  margin-bottom: 0;
+}
+
+.dedicated-page-header .section-title-google {
+  margin-bottom: 12px;
+}
+
+.dedicated-platform-intro {
+  max-width: 820px;
+  margin: 0 auto 8px;
+  color: var(--trio-primary);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.dedicated-page-intro {
+  max-width: 820px;
+  margin: 0 auto;
+  color: #5f6368;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.dedicated-page > section .google-modules-header {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .dedicated-page-header {
+    padding-top: 96px;
+  }
+
+  .dedicated-page-intro {
+    font-size: 15px;
+  }
+}

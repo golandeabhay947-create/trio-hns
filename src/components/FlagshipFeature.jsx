@@ -42,12 +42,8 @@ export default function FlagshipFeature({ onOpenModal }) {
                 </button>
 
                 <a 
-                  href="#modules" 
+                  href="/hospital-modules" 
                   className="flagship-link-arrow"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById('modules')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
                 >
                   <span>View 18 Modules</span>
                   <i className="bi bi-chevron-right"></i>
