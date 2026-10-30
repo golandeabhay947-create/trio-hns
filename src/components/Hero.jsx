@@ -85,14 +85,13 @@ export default function Hero({ onOpenModal, scrolled }) {
       <div className="hero-management-visual" aria-hidden="true">
         <img
           src="/assets/images/Futuristic Healthcare Cross in Motion.png"
-          alt=""
+          alt="TRIO HIMS Modern Healthcare Management"
           className="hero-management-image"
           loading="eager"
           fetchpriority="high"
           decoding="async"
         />
-        <div className={`hero-white-cover ${scrolled ? 'active' : ''}`}></div>
-        <div className={`hero-bottom-fade ${scrolled ? 'active' : ''}`}></div>
+        <div className="hero-bottom-fade"></div>
       </div>
 
       <div className="hero-editorial-stage">

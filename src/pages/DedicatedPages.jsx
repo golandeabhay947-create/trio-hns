@@ -9,6 +9,7 @@ import KeyFeatures from '../components/KeyFeatures';
 import Modules from '../components/Modules';
 import AppointmentSection from '../components/AppointmentSection';
 import Workflows from '../components/Workflows';
+import InteractiveWorkflowJourney from '../components/demos/InteractiveWorkflowJourney';
 import Faq from '../components/Faq';
 import Testimonials from '../components/Testimonials';
 import Contact from '../components/Contact';
@@ -92,8 +93,11 @@ export function WorkflowsPage({ onOpenModal }) {
   return (
     <DedicatedPage
       title="HIMS Work Flows"
-      intro="Browse the existing workflow diagrams to see how hospital processes connect across outpatient, inpatient, diagnostic, and administrative teams."
+      intro="Experience interactive patient journeys and browse detailed architectural workflow diagrams connecting outpatient, inpatient, diagnostic, and administrative teams."
     >
+      <div className="container py-4">
+        <InteractiveWorkflowJourney />
+      </div>
       <Workflows onOpenModal={onOpenModal} />
     </DedicatedPage>
   );

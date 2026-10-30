@@ -8,5 +8,16 @@ export default defineConfig({
     port: 5173,
     open: false,
     host: true
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-three': ['three'],
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-motion': ['framer-motion', 'lenis']
+        }
+      }
+    }
   }
 })

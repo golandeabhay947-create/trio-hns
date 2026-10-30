@@ -3,17 +3,33 @@ import { Link } from 'react-router-dom';
 import Contact from '../components/Contact';
 import KeyFeatures from '../components/KeyFeatures';
 import TrustedBy from '../components/TrustedBy';
+import ProductDemoHub from '../components/demos/ProductDemoHub';
 import { submitDemoRequest } from '../lib/submitDemoRequest';
 import { modulesData } from '../data/modulesData';
 import { testimonialsData } from '../data/testimonialsData';
 import './home-page-previews.css';
 
 const WHY_TRIO_ITEMS = [
-  { title: 'Hospital-Centric Design', icon: 'bi-hospital-fill' },
-  { title: 'Quality Personnel', icon: 'bi-people-fill' },
-  { title: 'Innovation', icon: 'bi-lightbulb-fill' },
-  { title: 'Secure & Compliant', icon: 'bi-shield-check' },
-  { title: 'Scalable Solution', icon: 'bi-graph-up-arrow' },
+  {
+    title: 'Hospital-Centric Design',
+    icon: 'bi-hospital-fill',
+    description: 'Engineered specifically for clinical, administrative, and multi-speciality operational healthcare workflows.'
+  },
+  {
+    title: 'Quality Personnel & Support',
+    icon: 'bi-people-fill',
+    description: '10+ years of healthcare IT domain expertise backed by 24/7 dedicated implementation and onboarding engineers.'
+  },
+  {
+    title: 'Innovation & Scalability',
+    icon: 'bi-lightbulb-fill',
+    description: 'Scalable cloud-ready architecture unifying 18+ comprehensive hospital management modules in real time.'
+  },
+  {
+    title: 'Secure & Compliant',
+    icon: 'bi-shield-check',
+    description: 'Standardized NABH-ready clinical documentation, ISO 27001 data safeguards, and ABDM ecosystem alignment.'
+  },
 ];
 
 function PreviewHeading({ id, title, accent, description }) {
@@ -44,7 +60,7 @@ export default function HomePagePreviews() {
     <div className="home-previews">
       <section className="home-preview-section home-preview-why" aria-labelledby="home-preview-why-title">
         <div className="container">
-          <div className="home-why-card">
+          <div className="home-why-outer-card">
             <div className="home-preview-heading home-why-heading text-center">
               <div className="home-why-eyebrow" aria-label="Why Choose TRIO">
                 <span className="home-why-eyebrow-line" aria-hidden="true"></span>
@@ -55,23 +71,27 @@ export default function HomePagePreviews() {
               <h2 id="home-preview-why-title" className="section-title-google">
                 Why Choose <span className="text-gradient-gemini">TRIO</span>
               </h2>
+              <p className="home-preview-intro">
+                Proven healthcare technology connecting clinical excellence, operational efficiency, and financial security.
+              </p>
             </div>
 
-            <div className="home-why-grid">
-              {WHY_TRIO_ITEMS.map((item) => (
-                <article className="home-why-feature-card" key={item.title}>
-                  <span className="home-why-feature-icon" aria-hidden="true">
-                    <i className={`bi ${item.icon}`}></i>
-                  </span>
-                  <h3>{item.title}</h3>
+            <div className="home-why-subcards-grid">
+              {WHY_TRIO_ITEMS.map((item, idx) => (
+                <article className="home-why-subcard" key={item.title}>
+                  <div className="home-why-subcard-header">
+                    <span className="home-why-subcard-icon" aria-hidden="true">
+                      <i className={`bi ${item.icon}`}></i>
+                    </span>
+                    <span className="home-why-subcard-num">0{idx + 1}</span>
+                  </div>
+                  <h3 className="home-why-subcard-title">{item.title}</h3>
+                  <p className="home-why-subcard-desc">{item.description}</p>
                 </article>
               ))}
             </div>
 
-            <div className="home-why-center">
-              <div className="home-why-center-icon" aria-hidden="true">
-                <i className="bi bi-hospital-fill"></i>
-              </div>
+            <div className="home-why-cta-wrap text-center">
               <SectionLink to="/why-choose-trio" className="btn-google-pill home-why-cta">
                 See Why Choose Us
               </SectionLink>
@@ -82,32 +102,45 @@ export default function HomePagePreviews() {
 
       <section className="home-preview-section home-preview-modules" aria-labelledby="home-preview-modules-title">
         <div className="container">
-          <PreviewHeading
-            id="home-preview-modules-title"
-            title="Hospital"
-            accent="Modules"
-          />
-          <div className="home-module-container">
-            <ul className="home-module-grid">
-              {modulesData.map((module) => (
-                <li className="home-module-item" key={module.id}>
-                  <div className="home-module-card-heading">
-                    <span className="home-module-icon" aria-hidden="true">
-                      <i className={`bx ${module.icon}`}></i>
-                    </span>
-                    <span className="home-module-category">{module.category}</span>
-                  </div>
-                  <h3 className="home-module-title">{module.title}</h3>
-                  <p className="home-module-description">{module.description}</p>
-                </li>
-              ))}
-            </ul>
-            <div className="home-preview-actions">
-              <SectionLink to="/hospital-modules">See All Modules</SectionLink>
+          <div className="home-modules-showcase-container">
+            <PreviewHeading
+              id="home-preview-modules-title"
+              title="Hospital"
+              accent="Modules"
+              description="Explore TRIO HIMS’s complete suite of 18 integrated hospital management modules spanning clinical, diagnostic, pharmacy, and administrative departments."
+            />
+            <div className="home-module-grid-wrap">
+              <ul className="home-module-subcards-grid">
+                {modulesData.map((module) => (
+                  <li className="home-module-subcard" key={module.id}>
+                    <Link to={`/modules/${module.id}`} className="home-module-subcard-link">
+                      <div className="home-module-subcard-top">
+                        <span className="home-module-icon-squircle" aria-hidden="true">
+                          <i className={`bx ${module.icon}`}></i>
+                        </span>
+                        <span className="home-module-category-badge">{module.category}</span>
+                      </div>
+                      <h3 className="home-module-subcard-title">{module.shortTitle || module.title}</h3>
+                      <p className="home-module-subcard-desc">{module.description}</p>
+                      <div className="home-module-subcard-footer">
+                        <span className="home-module-explore-label">Explore Capabilities</span>
+                        <i className="bi bi-arrow-right" aria-hidden="true"></i>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="home-preview-actions home-modules-cta-row">
+              <SectionLink to="/hospital-modules" className="btn-google-pill">
+                See All Modules
+              </SectionLink>
             </div>
           </div>
         </div>
       </section>
+
+      <ProductDemoHub />
 
       <section className="home-preview-section home-preview-trusted" aria-label="Trusted by healthcare partners">
         <div className="container">
@@ -140,10 +173,25 @@ export default function HomePagePreviews() {
             id="home-preview-workflows-title"
             title="HIMS Work"
             accent="Flows"
-            description="See how connected steps carry patient information between hospital teams and services."
+            description="See how connected steps carry patient information between hospital teams and services without data silos."
           />
-          <div className="home-preview-actions">
-            <SectionLink to="/workflows">Explore Workflows</SectionLink>
+          <div className="home-workflows-preview-card">
+            <div className="home-workflow-path-row">
+              <span className="workflow-path-chip"><i className="bi bi-person-plus-fill me-1"></i> Registration</span>
+              <i className="bi bi-arrow-right workflow-path-arrow"></i>
+              <span className="workflow-path-chip"><i className="bi bi-heart-pulse-fill me-1"></i> Consultation</span>
+              <i className="bi bi-arrow-right workflow-path-arrow"></i>
+              <span className="workflow-path-chip"><i className="bi bi-droplet-fill me-1"></i> Diagnostics</span>
+              <i className="bi bi-arrow-right workflow-path-arrow"></i>
+              <span className="workflow-path-chip"><i className="bi bi-capsule me-1"></i> Pharmacy</span>
+              <i className="bi bi-arrow-right workflow-path-arrow"></i>
+              <span className="workflow-path-chip"><i className="bi bi-receipt-cutoff me-1"></i> Billing</span>
+              <i className="bi bi-arrow-right workflow-path-arrow"></i>
+              <span className="workflow-path-chip"><i className="bi bi-check2-circle me-1"></i> Follow-up</span>
+            </div>
+            <div className="home-preview-actions mt-3">
+              <SectionLink to="/workflows">Explore Full Workflows & Architecture</SectionLink>
+            </div>
           </div>
         </div>
       </section>

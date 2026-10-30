@@ -59,6 +59,7 @@ const PARTNERS = [
     id: 'sunrise',
     name: 'Sunrise Super Speciality Hospital',
     type: 'Tertiary Care Hospital',
+    logo: '/assets/img/sunriseHospital.webp',
     accent: '#f87820'
   }
 ];
