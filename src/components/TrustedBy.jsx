@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import ClinicianReviewsSection from './ClinicianReviewsSection';
 
 const PARTNERS = [
   {
@@ -561,6 +562,46 @@ export default function TrustedBy() {
           </h2>
         </div>
 
+        {/* Gold Badges Trust Strip: 10 Years, 200+ Hospitals, 27 Modules, Excellent Service */}
+        <div className="trusted-badges-strip" aria-label="TRIO HIMS Gold Certifications">
+          <div className="trusted-badge-item">
+            <img 
+              src="/assets/images/1-removebg-preview.png" 
+              alt="10 Years Expertise" 
+              className="trusted-badge-img"
+              loading="lazy"
+            />
+            <span className="trusted-badge-caption">10 Years Expertise</span>
+          </div>
+          <div className="trusted-badge-item">
+            <img 
+              src="/assets/images/2-removebg-preview.png" 
+              alt="Deploy in 200+ Hospitals" 
+              className="trusted-badge-img"
+              loading="lazy"
+            />
+            <span className="trusted-badge-caption">200+ Hospitals</span>
+          </div>
+          <div className="trusted-badge-item">
+            <img 
+              src="/assets/images/3-removebg-preview.png" 
+              alt="27 Hospital Modules" 
+              className="trusted-badge-img"
+              loading="lazy"
+            />
+            <span className="trusted-badge-caption">27 Hospital Modules</span>
+          </div>
+          <div className="trusted-badge-item">
+            <img 
+              src="/assets/images/4-removebg-preview(4).png" 
+              alt="Excellent Service and Support System" 
+              className="trusted-badge-img"
+              loading="lazy"
+            />
+            <span className="trusted-badge-caption">Excellent Support</span>
+          </div>
+        </div>
+
         {/* =========================================================
             3D ROUND ROTATING BOXES (CENTERED DIRECTLY BELOW TOP HEADING)
             ========================================================= */}
@@ -576,6 +617,12 @@ export default function TrustedBy() {
             />
           </div>
         </div>
+
+        {/* =========================================================
+            VERIFIED CLINICIAN REVIEWS & TESTIMONIALS SECTION
+            Directly below rotating circular animation (matching image_98affa.png)
+            ========================================================= */}
+        <ClinicianReviewsSection />
 
         <ul className="visually-hidden">
           {PARTNERS.map((partner) => (

@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { modulesData } from '../data/modulesData';
 
-export default function ModuleDetailPage({ onOpenModal }) {
+export default function ModuleDetailPage({ onOpenModal, forceModuleId }) {
   const { moduleId } = useParams();
   const navigate = useNavigate();
   const capabilitiesRef = useRef(null);
-  const targetId = Number(moduleId);
+  const targetId = forceModuleId ? forceModuleId : Number(moduleId);
   const activeIndex = modulesData.findIndex((module) => module.id === targetId);
   const module = activeIndex >= 0 ? modulesData[activeIndex] : null;
   const prevModule = module
@@ -60,6 +60,10 @@ export default function ModuleDetailPage({ onOpenModal }) {
             Back to Hospital Modules
           </Link>
 
+          <Link to="/" className="module-detail-brand-center" aria-label="TRIO HIMS Home">
+            <img src="/assets/img/trio-logo.png" alt="TRIO HIMS" className="module-detail-brand-logo" />
+          </Link>
+
           <div className="module-detail-nav-buttons">
             <button
               type="button"
@@ -87,7 +91,9 @@ export default function ModuleDetailPage({ onOpenModal }) {
 
           <div className="module-detail-header-row">
             <div className="module-detail-icon-badge" aria-hidden="true">
-              {module.image ? (
+              {module.iconImage ? (
+                <img className="module-detail-image" src={module.iconImage} alt={module.shortTitle} />
+              ) : module.image ? (
                 <img className="module-detail-image" src={module.image} alt="" />
               ) : (
                 <i className={`bx ${module.icon}`}></i>
@@ -98,6 +104,7 @@ export default function ModuleDetailPage({ onOpenModal }) {
               <div className="module-detail-meta-row">
                 <span className="google-modal-cat-badge">{module.category}</span>
                 <span className="google-modal-idx-pill">{module.subtitle}</span>
+                {module.badge && <span className="badge-abha-new ms-1">{module.badge}</span>}
               </div>
               <h1 className="module-detail-title">{module.title}</h1>
             </div>

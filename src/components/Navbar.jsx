@@ -3,12 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 
 const NAV_ITEMS = [
   { label: 'Home', path: '/' },
-  { label: 'Why Choose TRIO', path: '/why-choose-trio' },
-  { label: 'Hospital Modules', path: '/hospital-modules' },
-  { label: 'Trusted By', path: '/trusted-by' },
-  { label: 'Key Features', path: '/key-features' },
-  { label: 'HIMS Work Flows', path: '/workflows' },
-  { label: 'Testimonials', path: '/testimonials' },
+  { label: 'Why Us', path: '/why-choose-trio' },
+  { label: 'Modules', path: '/hospital-modules' },
+  { label: 'ABHA', path: '/abha', badge: 'NEW' },
+  { label: 'Partners', path: '/trusted-by' },
+  { label: 'Features', path: '/key-features' },
+  { label: 'Workflows', path: '/workflows' },
+  { label: 'Reviews', path: '/testimonials' },
   { label: 'FAQ', path: '/faq' },
   { label: 'Contact', path: '/contact' },
 ];
@@ -80,9 +81,23 @@ export default function Navbar({ onOpenModal, scrolled: externalScrolled }) {
     setMobileMenuOpen(false);
   };
 
+  // Critical routing fix: Keep ABHA and Hospital Modules completely separated
+  const isItemActive = (itemPath) => {
+    if (itemPath === '/hospital-modules') {
+      return (
+        location.pathname === '/hospital-modules' ||
+        (location.pathname.startsWith('/modules/') && location.pathname !== '/modules/19')
+      );
+    }
+    if (itemPath === '/abha') {
+      return location.pathname === '/abha' || location.pathname === '/modules/19';
+    }
+    return location.pathname === itemPath;
+  };
+
   return (
     <header id="header" className={`fixed-top d-flex align-items-center ${scrolled ? 'header-scrolled' : ''}`}>
-      <div className="container d-flex align-items-center justify-content-between">
+      <div className="container header-nav-container d-flex align-items-center justify-content-between">
         <div className="logo">
           <Link to="/" aria-label="TRIO HIMS home" onClick={() => setMobileMenuOpen(false)}>
             <img
@@ -106,24 +121,34 @@ export default function Navbar({ onOpenModal, scrolled: externalScrolled }) {
           />
 
           <ul id="primary-navigation-links" onClickCapture={handleNavigationClick}>
-            {NAV_ITEMS.map((item) => (
-              <li key={item.path}>
-                <Link
-                  to={item.path}
-                  className={location.pathname === item.path || (item.path === '/hospital-modules' && location.pathname.startsWith('/modules/')) ? 'active' : ''}
-                  aria-current={location.pathname === item.path || (item.path === '/hospital-modules' && location.pathname.startsWith('/modules/')) ? 'page' : undefined}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {NAV_ITEMS.map((item) => {
+              const active = isItemActive(item.path);
+              return (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className={`nav-link-item ${active ? 'active' : ''}`}
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    <span className="nav-label-wrap">
+                      {item.label}
+                      {item.badge && (
+                        <span className="badge-superscript-new" aria-label="New feature">
+                          {item.badge}
+                        </span>
+                      )}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
         <div className="google-nav-actions d-flex align-items-center">
           <button
             type="button"
-            className="btn-google-pill"
+            className="btn-google-pill btn-header-demo"
             onClick={onOpenModal}
             aria-label="Book a demo"
           >

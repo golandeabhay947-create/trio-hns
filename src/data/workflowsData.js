@@ -5,7 +5,7 @@ export const workflowsData = [
     subtitle: "Complete OPD Lifecycle Management",
     tag: "OPD Clinical Flow",
     icon: "bx-user-check",
-    image: "/assets/img/workflow/out-patient2.png",
+    image: "/assets/img/workflow/out-patient-flow.png",
     description: "Connects patient registration, queue calling, physician EMR, investigations, and instant billing.",
     metrics: [
       { label: "Patient Turnaround", value: "< 4.5 Mins", icon: "bi-stopwatch" },
@@ -27,7 +27,7 @@ export const workflowsData = [
     subtitle: "Admission to Discharge Protocol",
     tag: "IPD Ward Operations",
     icon: "bx-bed",
-    image: "/assets/img/workflow/in-patient.png",
+    image: "/assets/img/workflow/in-patient-flow.png",
     description: "Orchestrates ward admission, bed tariffs, treatment charts, nursing care, OT, and discharge billing.",
     metrics: [
       { label: "Admission Protocol", value: "< 90 Seconds", icon: "bi-speedometer2" },
@@ -49,7 +49,7 @@ export const workflowsData = [
     subtitle: "PACS & DICOM Modality Sync",
     tag: "Imaging & Diagnostics",
     icon: "bx-scan",
-    image: "/assets/img/workflow/radiology.png",
+    image: "/assets/img/workflow/radiology-flow.png",
     description: "Streamlines radiological requisitions, modality scanning, high-res film reviews, and digital EMR delivery.",
     metrics: [
       { label: "Modality Sync", value: "DICOM 3.0 / PACS", icon: "bi-broadcast" },
@@ -71,7 +71,7 @@ export const workflowsData = [
     subtitle: "Automated Machine Interfacing",
     tag: "LIS & Analyzers",
     icon: "bx-vial",
-    image: "/assets/img/workflow/laboratory.png",
+    image: "/assets/img/workflow/laboratory-flow.png",
     description: "Automates barcoding, analyzer machine data capture, panic value alerts, and verified report printing.",
     metrics: [
       { label: "LIS Interfacing", value: "Bi-directional", icon: "bi-arrow-left-right" },
@@ -93,7 +93,7 @@ export const workflowsData = [
     subtitle: "Bi-directional Tally & Financial Governance",
     tag: "Tally & Finance",
     icon: "bx-calculator",
-    image: "/assets/icon/HIMS Images Workflow (1).png",
+    image: "/assets/img/workflow/accounting-flow.png",
     description: "Seamless financial synchronization between hospital counters and corporate accounting ledgers.",
     metrics: [
       { label: "Ledger Sync", value: "2-Way Tally Prime", icon: "bi-arrow-repeat" },
@@ -115,7 +115,7 @@ export const workflowsData = [
     subtitle: "High-Security Cloud Infrastructure",
     tag: "Cloud Infrastructure",
     icon: "bx-shield-quarter",
-    image: "/assets/icon/HIMS Images Workflow.png",
+    image: "/assets/img/workflow/stores-inventory-flow.png",
     description: "Enterprise-grade multi-tier architecture built for 99.98% availability, encryption, and zero maintenance.",
     metrics: [
       { label: "System Availability", value: "99.98% SLA", icon: "bi-server" },

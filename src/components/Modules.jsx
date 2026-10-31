@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { modulesData } from '../data/modulesData';
 
 export default function Modules({ onOpenModal }) {
@@ -7,6 +7,7 @@ export default function Modules({ onOpenModal }) {
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const previewRef = useRef(null);
+  const navigate = useNavigate();
 
   const categories = useMemo(() => {
     const list = Array.from(new Set(modulesData.map((m) => m.category)));
@@ -55,6 +56,15 @@ export default function Modules({ onOpenModal }) {
 
   const closePreview = () => previewRef.current?.close();
 
+  const handleTileClick = (module) => {
+    // If the module is ABHA, navigate directly to /abha without opening the generic modal
+    if (module.id === 19 || module.path === '/abha' || module.shortTitle.toLowerCase().includes('abha')) {
+      navigate('/abha');
+      return;
+    }
+    setSelectedModule(module);
+  };
+
   return (
     <section id="modules" className="google-modules-section">
       <div className="container">
@@ -63,7 +73,7 @@ export default function Modules({ onOpenModal }) {
             Hospital <span className="text-gradient-gemini">Modules</span>
           </h2>
           <p className="modules-catalog-subtitle text-muted">
-            Explore 18 unified hospital information management modules engineered for seamless department interoperability.
+            Explore {modulesData.length} unified hospital information management modules engineered for seamless department interoperability.
           </p>
         </div>
 
@@ -134,24 +144,41 @@ export default function Modules({ onOpenModal }) {
               <article key={module.id} className="google-module-tile-wrap">
                 <button
                   type="button"
-                  className="google-module-tile"
-                  onClick={() => setSelectedModule(module)}
-                  aria-haspopup="dialog"
-                  aria-label={`Preview ${module.shortTitle}`}
+                  className={`google-module-tile ${module.id === 19 ? 'tile-highlight-abha' : ''}`}
+                  onClick={() => handleTileClick(module)}
+                  aria-haspopup={module.id === 19 ? 'false' : 'dialog'}
+                  aria-label={`${module.id === 19 ? 'Explore' : 'Preview'} ${module.shortTitle}`}
                 >
                   <div className="google-tile-visual">
-                    <i className={`bx ${module.icon}`} aria-hidden="true"></i>
+                    {module.iconImage ? (
+                      <div className="google-tile-img-container">
+                        <img
+                          src={module.iconImage}
+                          alt={module.shortTitle}
+                          className="google-tile-module-img"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div className="google-tile-icon-circle">
+                        <i className={`bx ${module.icon}`} aria-hidden="true"></i>
+                      </div>
+                    )}
                     <div className="google-tile-index" aria-hidden="true">
                       <span className="tile-idx-num">{String(module.id).padStart(2, '0')}</span>
+                      <i className="bi bi-arrow-up-right tile-idx-arrow" aria-hidden="true"></i>
                     </div>
                   </div>
 
                   <div className="google-tile-content">
-                    <span className="module-grid-cat-pill">{module.category}</span>
+                    <div className="d-flex align-items-center justify-content-between mb-1">
+                      <span className="module-grid-cat-pill">{module.category}</span>
+                      {module.badge && <span className="badge-abha-new">{module.badge}</span>}
+                    </div>
                     <h3 className="google-tile-title">{module.shortTitle}</h3>
                     <p className="google-tile-subtitle">{module.description}</p>
                     <div className="module-tile-action-link">
-                      <span>Quick Preview</span>
+                      <span>{module.id === 19 ? 'Explore ABHA Suite' : 'Quick Preview'}</span>
                       <i className="bi bi-arrow-right ms-1"></i>
                     </div>
                   </div>
@@ -187,7 +214,15 @@ export default function Modules({ onOpenModal }) {
               <i className="bi bi-x-lg" aria-hidden="true"></i>
             </button>
             <div className="module-preview-visual" aria-hidden="true">
-              <i className={`bx ${selectedModule.icon}`}></i>
+              {selectedModule.iconImage ? (
+                <img
+                  src={selectedModule.iconImage}
+                  alt={selectedModule.shortTitle}
+                  className="module-preview-img"
+                />
+              ) : (
+                <i className={`bx ${selectedModule.icon}`}></i>
+              )}
             </div>
             <span className="google-modal-cat-badge">{selectedModule.category}</span>
             <h2 id="module-preview-title" className="module-preview-title">
@@ -203,18 +238,22 @@ export default function Modules({ onOpenModal }) {
               ))}
             </ul>
             <div className="module-preview-actions">
-              <button type="button" className="btn-book-demo" onClick={() => {
-                closePreview();
-                onOpenModal();
-              }}>
+              <button
+                type="button"
+                className="btn-book-demo"
+                onClick={() => {
+                  closePreview();
+                  onOpenModal();
+                }}
+              >
                 Book Demo
               </button>
               <Link
-                to={`/modules/${selectedModule.id}`}
+                to={selectedModule.id === 19 ? '/abha' : `/modules/${selectedModule.id}`}
                 className="btn-module-know-more"
                 onClick={closePreview}
               >
-                View Full Module Spec
+                {selectedModule.id === 19 ? 'Open Full ABHA Suite' : 'View Full Module Spec'}
               </Link>
             </div>
           </div>

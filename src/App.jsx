@@ -119,6 +119,10 @@ export default function App() {
         title: 'Hospital Modules | TRIO HIMS',
         description: 'Explore the hospital modules available in TRIO HIMS and open module previews and details.',
       },
+      '/abha': {
+        title: 'ABHA & ABDM Integration | TRIO HIMS',
+        description: 'Native Ayushman Bharat Digital Mission (ABDM M1-M3) and ABHA ID health card integration in TRIO HIMS.',
+      },
       '/trusted-by': {
         title: 'Trusted By | TRIO HIMS',
         description: 'View the partner and organization showcase featured on the TRIO HIMS website.',
@@ -199,7 +203,10 @@ export default function App() {
             element={<HospitalModulesPage onOpenModal={() => setIsModalOpen(true)} />}
           />
           <Route path="/trusted-by" element={<TrustedByPage />} />
-          <Route path="/key-features" element={<KeyFeaturesPage />} />
+          <Route
+            path="/key-features"
+            element={<KeyFeaturesPage onOpenModal={() => setIsModalOpen(true)} />}
+          />
           <Route
             path="/workflows"
             element={<WorkflowsPage onOpenModal={() => setIsModalOpen(true)} />}
@@ -207,6 +214,10 @@ export default function App() {
           <Route path="/testimonials" element={<TestimonialsPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route
+            path="/abha"
+            element={<ModuleDetailPage onOpenModal={() => setIsModalOpen(true)} forceModuleId={19} />}
+          />
           <Route
             path="/modules/:moduleId"
             element={<ModuleDetailPage onOpenModal={() => setIsModalOpen(true)} />}

@@ -5,11 +5,14 @@ export const modulesData = [
     shortTitle: "Patient Registration (RADT)",
     subtitle: "Front Desk & Admissions",
     icon: "bx-user-plus",
+    iconImage: "/assets/images/modules/patient_registration.png",
     image: "/assets/img/workflow/out-patient2.png",
     category: "Clinical & Front Desk",
     description: "Complete patient lifecycle management from entry to discharge with emergency handling.",
     features: [
       "Patient Registration (OPD / IPD / Daycare)",
+      "ABHA Number Creation & Verification (NEW)",
+      "Scan & Share QR-Code OPD Token Intake",
       "Automated Unique Patient Identification (UHID)",
       "Inpatient Admissions & Bed Allocation",
       "Inter-ward and Bed Transfers",
@@ -24,6 +27,7 @@ export const modulesData = [
     shortTitle: "Billing & Cash Counter",
     subtitle: "Cashless, TPA & Invoicing",
     icon: "bx-receipt",
+    iconImage: "/assets/images/modules/billing_cash_counter.png",
     category: "Finance & Accounts",
     description: "Multi-mode payment billing, corporate/cashless coverage, packages and audits.",
     features: [
@@ -49,6 +53,7 @@ export const modulesData = [
     shortTitle: "Doctor Consultation Desk",
     subtitle: "OPD & E-Prescriptions",
     icon: "bx-pulse",
+    iconImage: "/assets/images/modules/doctor_consultation.png",
     image: "/assets/img/workflow/out-patient2.png",
     category: "Clinical & Doctors",
     description: "Electronic health records, doctor consultation desks, and e-prescriptions.",
@@ -68,6 +73,7 @@ export const modulesData = [
     shortTitle: "Radiology (RIS & PACS)",
     subtitle: "Imaging, X-Ray & DICOM",
     icon: "bx-scan",
+    iconImage: "/assets/images/modules/radiology_ris_pacs.png",
     image: "/assets/img/workflow/radiology.png",
     category: "Diagnostics",
     description: "Complete radiology workflow, order processing, and PACS imaging integration.",
@@ -88,6 +94,7 @@ export const modulesData = [
     shortTitle: "Electronic Health Records",
     subtitle: "Unified EMR / EHR History",
     icon: "bx-folder-open",
+    iconImage: "/assets/images/modules/electronic_health_records.png",
     category: "Clinical & Doctors",
     description: "Longitudinal health records uniting clinical, diagnostic, and administrative data.",
     features: [
@@ -107,6 +114,7 @@ export const modulesData = [
     shortTitle: "Laboratory (LIS)",
     subtitle: "Bi-directional Auto-Analyzers",
     icon: "bx-vial",
+    iconImage: "/assets/images/modules/laboratory_lis.png",
     image: "/assets/img/workflow/laboratory.png",
     category: "Diagnostics",
     description: "End-to-end pathology workflow with machine interfacing and barcode tracking.",
@@ -128,6 +136,7 @@ export const modulesData = [
     shortTitle: "Pharmacy Management",
     subtitle: "Retail & IPD Drug Dispensing",
     icon: "bx-capsule",
+    iconImage: "/assets/images/modules/pharmacy_management.png",
     category: "Inventory & Pharmacy",
     description: "Retail and IPD pharmacy sales, batch/expiry controls, and GST compliance.",
     features: [
@@ -149,6 +158,7 @@ export const modulesData = [
     shortTitle: "Financial Accounting",
     subtitle: "2-Way Tally ERP Sync",
     icon: "bx-calculator",
+    iconImage: "/assets/images/modules/financial_accounting.png",
     category: "Finance & Accounts",
     description: "Two-way Tally bridge, accounts receivable, payables, and financial reporting.",
     features: [
@@ -167,6 +177,7 @@ export const modulesData = [
     shortTitle: "Nursing Care Station",
     subtitle: "Vitals, MAR & Handover",
     icon: "bx-first-aid",
+    iconImage: "/assets/images/modules/nursing_care_station.png",
     image: "/assets/img/workflow/in-patient.png",
     category: "Inpatient Care",
     description: "Ward administration, vitals charting, doctor order execution, and bed control.",
@@ -187,6 +198,7 @@ export const modulesData = [
     shortTitle: "Statutory Compliance",
     subtitle: "Hospital License Tracking",
     icon: "bx-shield-quarter",
+    iconImage: "/assets/images/modules/statutory_compliance.png",
     category: "Administration",
     description: "Centralized tracking and timely automated reminders for hospital statutory licenses.",
     features: [
@@ -203,6 +215,7 @@ export const modulesData = [
     shortTitle: "Machine Interfacing",
     subtitle: "ASTM & HL7 Protocols",
     icon: "bx-devices",
+    iconImage: "/assets/images/modules/machine_interfacing.png",
     category: "Technical & Hardware",
     description: "Direct machine integration with analyzers, biometric devices, and display tokens.",
     features: [
@@ -221,6 +234,7 @@ export const modulesData = [
     shortTitle: "Asset Maintenance (BAM)",
     subtitle: "Equipment AMC & Calibration",
     icon: "bx-wrench",
+    iconImage: "/assets/images/modules/asset_maintenance.png",
     category: "Administration",
     description: "Preventive maintenance schedules, breakdown logs, AMC contracts, and depreciation.",
     features: [
@@ -239,6 +253,7 @@ export const modulesData = [
     shortTitle: "Visitor Management",
     subtitle: "Digital Passes & Security",
     icon: "bx-id-card",
+    iconImage: "/assets/images/modules/visitor_management.png",
     category: "Administration",
     description: "Digital visitor passes, security checkpoints, and visitor tracking.",
     features: [
@@ -257,6 +272,7 @@ export const modulesData = [
     shortTitle: "Diet & Kitchen Services",
     subtitle: "Clinical Nutrition & 8 Meals",
     icon: "bx-restaurant",
+    iconImage: "/assets/images/modules/diet_kitchen_services.png",
     category: "Hospital Services",
     description: "Personalized patient nutrition planning, 8-meal cycles, and dietitian reviews.",
     features: [
@@ -275,6 +291,7 @@ export const modulesData = [
     shortTitle: "Operation Theatre (OT)",
     subtitle: "WHO Checklists & Scheduling",
     icon: "bx-cut",
+    iconImage: "/assets/images/modules/operation_theatre.png",
     category: "Clinical & Surgery",
     description: "OT scheduling, multi-stage clinical checklists, anesthesia notes, and surgical safety.",
     features: [
@@ -295,6 +312,7 @@ export const modulesData = [
     shortTitle: "Staff Duty Roster",
     subtitle: "Shifts & Attendance Swaps",
     icon: "bx-calendar-event",
+    iconImage: "/assets/images/modules/staff_duty_roster.png",
     category: "HR & Operations",
     description: "Doctor, nurse, and support staff shift planning with Excel upload and swap approvals.",
     features: [
@@ -312,6 +330,7 @@ export const modulesData = [
     shortTitle: "Stores & Inventory",
     subtitle: "MUSIC-3D Analytics & ROL",
     icon: "bx-store-alt",
+    iconImage: "/assets/images/modules/stores_inventory.png",
     category: "Inventory & Supply",
     description: "Central warehouse, sub-stores, purchase indents, PO workflows, and MUSIC-3D analytics.",
     features: [
@@ -332,6 +351,7 @@ export const modulesData = [
     shortTitle: "HRMS & Staff Payroll",
     subtitle: "Biometric Attendance & Pay",
     icon: "bx-group",
+    iconImage: "/assets/images/modules/hrms_staff_payroll.png",
     category: "Administration",
     description: "Staff records, biometric attendance, salary generation, PF/TDS, and appraisals.",
     features: [
@@ -344,6 +364,46 @@ export const modulesData = [
       "TDS calculation and investment declaration forms",
       "Doctor visit incentives and consultant share payout reports",
       "Staff separation and full & final settlement process"
+    ]
+  },
+  {
+    id: 19,
+    title: "ABHA & ABDM Digital Health Mission Integration",
+    shortTitle: "ABHA Integration",
+    subtitle: "M1, M2 & M3 National Health Compliance",
+    icon: "bx-id-card",
+    iconImage: "/assets/images/modules/abha_integration.png",
+    category: "Compliance & ABDM",
+    badge: "NEW",
+    isNew: true,
+    path: "/abha",
+    description: "Native Ayushman Bharat Digital Mission (ABDM) integration enabling instant 14-digit ABHA creation, QR-code OPD scan & share, FHIR R4 medical records, and longitudinal patient health linkages.",
+    features: [
+      "Milestone 1 (M1): Instant 14-digit ABHA Generation & Aadhaar / Mobile OTP Verification",
+      "Scan & Share QR-Code Token Registration for zero-queue OPD reception intake",
+      "Milestone 2 (M2): Health Information Provider (HIP) linking consultations, lab reports & discharge notes",
+      "Milestone 3 (M3): Health Information User (HIU) viewing patient-consented longitudinal medical records",
+      "FHIR R4 digital record packaging conforming strictly to Indian National Health Authority (NHA) protocols",
+      "Patient electronic consent manager interface with instant revocation handling",
+      "Automated real-time gateway transmission with immutable ABDM compliance audit logs"
+    ]
+  },
+  {
+    id: 20,
+    title: "Management Information System (MIS & Executive Analytics)",
+    shortTitle: "MIS & Executive Analytics",
+    subtitle: "Real-time Dashboards & Reports",
+    icon: "bx-bar-chart-alt-2",
+    iconImage: "/assets/images/modules/mis_reports.png",
+    category: "Administration",
+    description: "Executive dashboards, clinical KPIs, financial summaries, and departmental performance intelligence.",
+    features: [
+      "Real-time hospital executive dashboard with live bed occupancy and revenue KPIs",
+      "Department-wise financial profitability, doctor productivity, and expense analytics",
+      "Turnaround time (TAT) tracking for OPD intake, emergency triage, Lab, and Pharmacy",
+      "Automated scheduled report distribution via email and PDF export",
+      "Doctor-wise patient volumes, surgery counts, and consultation revenue breakdowns",
+      "Predictive bed turnover and seasonal patient influx analytics"
     ]
   }
 ];

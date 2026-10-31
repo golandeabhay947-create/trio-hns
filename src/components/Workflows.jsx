@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { workflowsData } from '../data/workflowsData';
 
 export default function Workflows({ onOpenModal }) {
-  const [activeTab, setActiveTab] = useState(workflowsData[0].id);
+  const [activeTab, setActiveTab] = useState(workflowsData[0]?.id || 'out-patient');
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-  const activeIndex = workflowsData.findIndex(w => w.id === activeTab);
+  const activeIndex = workflowsData.findIndex((w) => w.id === activeTab);
   const activeWorkflow = workflowsData[activeIndex] || workflowsData[0];
 
-  // Keyboard navigation for Lightbox
+  // Close lightbox on Escape key
   useEffect(() => {
     if (!isLightboxOpen) return;
 
@@ -30,131 +31,137 @@ export default function Workflows({ onOpenModal }) {
   }, [isLightboxOpen]);
 
   return (
-    <section id="workflows" className="workflows-cinematic-section">
+    <section id="workflows" className="workflows-showcase-section py-4">
       <div className="container">
-
-        {/* Clean Header: Exact Same Size, No Subtitle, No Eyebrow Pill */}
-        <div className="google-modules-header text-center">
-          <h2 className="section-title-google">
-            HIMS <span className="text-gradient-gemini">Work Flows</span>
-          </h2>
-        </div>
-
+        {/* Two-Column Interactive Layout matching Reference Image */}
         <div className="row g-4 align-items-stretch">
-          
-          {/* Left Column: 6 Flow Navigation Tabs */}
+          {/* Left Column: Interactive Vertical Tab Menu */}
           <div className="col-lg-4 col-md-5">
-            <div className="workflow-tabs-stack" role="tablist" aria-label="Hospital Workflows">
+            <div
+              className="workflow-tab-menu-card"
+              role="tablist"
+              aria-label="HIMS Workflow Categories"
+            >
               {workflowsData.map((workflow, idx) => {
                 const isActive = activeTab === workflow.id;
+                const indexNumber = String(idx + 1).padStart(2, '0');
+
                 return (
-                  <div
+                  <button
                     key={workflow.id}
-                    className={`workflow-tab-card ${isActive ? 'active' : ''}`}
-                    onClick={() => setActiveTab(workflow.id)}
+                    type="button"
                     role="tab"
+                    id={`workflow-tab-${workflow.id}`}
                     aria-selected={isActive}
+                    aria-controls={`workflow-panel-${workflow.id}`}
                     tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setActiveTab(workflow.id);
-                      }
-                    }}
-                    title={`View ${workflow.title} flow`}
+                    className={`workflow-menu-item ${isActive ? 'active' : ''}`}
+                    onClick={() => setActiveTab(workflow.id)}
                   >
                     {/* Active Accent Bar */}
-                    <div className="workflow-tab-active-bar" aria-hidden="true"></div>
+                    <div className="workflow-item-indicator" aria-hidden="true" />
 
-                    {/* Left Icon Squircle */}
-                    <div className="workflow-tab-icon-box" aria-hidden="true">
-                      <i className={`bx ${workflow.icon || 'bx-layer'}`}></i>
+                    {/* Squircle Icon Box */}
+                    <div className="workflow-item-icon-box" aria-hidden="true">
+                      <i className={`bx ${workflow.icon || 'bx-layer'}`} />
                     </div>
 
-                    {/* Middle Info */}
-                    <div className="workflow-tab-text">
-                      <div className="workflow-tab-title">{workflow.title}</div>
-                      <div className="workflow-tab-sub">{workflow.subtitle}</div>
+                    {/* Title and Subtitle */}
+                    <div className="workflow-item-content">
+                      <div className="workflow-item-title">{workflow.title}</div>
+                      <div className="workflow-item-subtitle">{workflow.subtitle}</div>
                     </div>
 
-                    {/* Right Index & Arrow */}
-                    <div className="workflow-tab-end" aria-hidden="true">
-                      <span className="workflow-tab-index">0{idx + 1}</span>
-                      <i className="bi bi-chevron-right workflow-tab-arrow"></i>
+                    {/* Right-aligned Number and Arrow */}
+                    <div className="workflow-item-tail" aria-hidden="true">
+                      <span className="workflow-item-num">{indexNumber}</span>
+                      <i className="bi bi-chevron-right workflow-item-chevron" />
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Right Column: Architectural Flow Showcase (Big Image, Clean & Professional) */}
+          {/* Right Column: Workflow Image Display Container */}
           <div className="col-lg-8 col-md-7">
-            <div className="workflow-stage-card">
-              
-              {/* Big, High-Definition Architecture Image Stage */}
-              <div className="workflow-visual-stage">
-                <div 
-                  className="workflow-visual-stage-inner"
-                  onClick={() => setIsLightboxOpen(true)}
-                  title="Click to zoom architecture diagram in high resolution"
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') setIsLightboxOpen(true);
-                  }}
-                >
-                  <img 
-                    src={activeWorkflow.image} 
-                    alt={`${activeWorkflow.title} Workflow Architecture Diagram`}
-                    className="workflow-visual-img"
-                    loading="lazy"
-                  />
-                  <div className="visual-zoom-overlay">
-                    <i className="bi bi-arrows-angle-expand"></i>
-                    <span>Click to View Full Resolution</span>
-                  </div>
+            <div
+              className="workflow-display-card"
+              role="tabpanel"
+              id={`workflow-panel-${activeWorkflow.id}`}
+              aria-labelledby={`workflow-tab-${activeWorkflow.id}`}
+            >
+              <div
+                className="workflow-image-container"
+                onClick={() => setIsLightboxOpen(true)}
+                title="Click to zoom workflow diagram"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') setIsLightboxOpen(true);
+                }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeWorkflow.id}
+                    className="workflow-motion-frame"
+                    initial={{ opacity: 0, scale: 0.985 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.985 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <img
+                      src={activeWorkflow.image}
+                      alt={`${activeWorkflow.title} Workflow Architecture Diagram`}
+                      className="workflow-diagram-image"
+                      loading="eager"
+                      onError={(e) => {
+                        // Fallback to root placeholder if needed
+                        e.target.src = `/workflow/${activeWorkflow.id}.png`;
+                      }}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Subtle Hover Zoom Pill */}
+                <div className="workflow-zoom-hint" aria-hidden="true">
+                  <i className="bi bi-arrows-angle-expand me-1" />
+                  <span>Click to Expand</span>
                 </div>
               </div>
-
             </div>
           </div>
-
         </div>
-
       </div>
 
       {/* High-Resolution Diagram Lightbox Modal */}
       {isLightboxOpen && (
-        <div 
+        <div
           className="workflow-lightbox-backdrop"
           onClick={() => setIsLightboxOpen(false)}
           role="dialog"
           aria-modal="true"
           aria-label={`${activeWorkflow.title} Architecture Diagram`}
         >
-          <div 
-            className="workflow-lightbox-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="workflow-lightbox-modal" onClick={(e) => e.stopPropagation()}>
             <div className="workflow-lightbox-header">
               <div>
                 <h3 className="workflow-lightbox-title">{activeWorkflow.title} Architecture Blueprint</h3>
-                <p className="workflow-lightbox-sub">{activeWorkflow.description}</p>
+                <p className="workflow-lightbox-sub">{activeWorkflow.subtitle}</p>
               </div>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="google-modal-close-btn"
                 onClick={() => setIsLightboxOpen(false)}
                 aria-label="Close Diagram"
               >
-                <i className="bi bi-x-lg"></i>
+                <i className="bi bi-x-lg" />
               </button>
             </div>
 
             <div className="workflow-lightbox-body">
-              <img 
-                src={activeWorkflow.image} 
+              <img
+                src={activeWorkflow.image}
                 alt={`${activeWorkflow.title} Full Architecture`}
                 className="workflow-lightbox-full-img"
               />
@@ -164,22 +171,23 @@ export default function Workflows({ onOpenModal }) {
               <span className="lightbox-flow-info">
                 <strong>Flow 0{activeIndex + 1}:</strong> {activeWorkflow.title}
               </span>
-              <button 
-                type="button"
-                className="workflow-walkthrough-btn"
-                onClick={() => {
-                  setIsLightboxOpen(false);
-                  if (onOpenModal) onOpenModal();
-                }}
-              >
-                <span>Book Live Demonstration</span>
-                <i className="bi bi-arrow-right ms-2"></i>
-              </button>
+              {onOpenModal && (
+                <button
+                  type="button"
+                  className="btn-book-demo"
+                  onClick={() => {
+                    setIsLightboxOpen(false);
+                    onOpenModal();
+                  }}
+                >
+                  <span>Book Live Demonstration</span>
+                  <i className="bi bi-arrow-right ms-2" />
+                </button>
+              )}
             </div>
           </div>
         </div>
       )}
-
     </section>
   );
 }

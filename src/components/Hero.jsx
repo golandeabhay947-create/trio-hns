@@ -112,7 +112,9 @@ export default function Hero({ onOpenModal, scrolled }) {
           </h1>
 
           <p className="hero-supporting-copy">
-            Simplify every aspect of hospital management with TRIO HIMS, an integrated healthcare information management system designed to connect departments, streamline workflows, and bring essential operations into one platform.
+            <strong className="hero-supporting-bold-text">
+              Simplify every aspect of hospital management with TRIO HIMS, an integrated healthcare information management system designed to connect departments, streamline workflows, and bring essential operations into one platform.
+            </strong>
           </p>
 
           <div className={`hero-cta-btn-wrap ${buttonVisible ? 'visible' : ''}`}>
@@ -154,16 +156,34 @@ export default function Hero({ onOpenModal, scrolled }) {
 
           <div className="hero-trust-indicators" aria-label="TRIO HIMS compliance and readiness">
             <span className="hero-trust-indicator">
-              <i className="bi bi-shield-check" aria-hidden="true"></i>
-              NABH Ready
+              <img
+                src="/assets/images/certifications/nabh-logo.png"
+                alt="NABH Accredited"
+                className="hero-cert-mini-logo"
+                loading="eager"
+              />
+              <span>NABH Ready</span>
             </span>
             <span className="hero-trust-indicator">
-              <i className="bi bi-lock-fill" aria-hidden="true"></i>
-              ISO 27001 Certified
+              <img
+                src="/assets/images/certifications/iso-27001-logo.png"
+                alt="ISO 27001 Certified"
+                className="hero-cert-mini-logo"
+                loading="eager"
+              />
+              <span>ISO 27001 Certified</span>
             </span>
-            <span className="hero-trust-indicator">
-              <i className="bi bi-activity" aria-hidden="true"></i>
-              ABDM M1-M3
+            <span className="hero-trust-indicator hero-trust-indicator-abha">
+              <img
+                src="/assets/images/certifications/abha-logo.png"
+                alt="ABHA ABDM Certified"
+                className="hero-cert-mini-logo"
+                loading="eager"
+              />
+              <span className="position-relative">
+                ABHA / ABDM M1-M3
+                <span className="badge-superscript-new">NEW</span>
+              </span>
             </span>
           </div>
 
@@ -206,13 +226,13 @@ export default function Hero({ onOpenModal, scrolled }) {
           <p className="hero-contact-kicker">Talk to TRIO HIMS</p>
           <div className="hero-contact-shortcuts">
             <a
-              className="hero-contact-card"
+              className="hero-contact-card hero-contact-card-whatsapp"
               href={TRIO_WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Chat with TRIO HIMS on WhatsApp"
             >
-              <span className="hero-contact-icon" aria-hidden="true">
+              <span className="hero-contact-icon hero-icon-whatsapp" aria-hidden="true">
                 <i className="bi bi-whatsapp"></i>
               </span>
               <span className="hero-contact-copy">
@@ -222,11 +242,11 @@ export default function Hero({ onOpenModal, scrolled }) {
             </a>
 
             <a
-              className="hero-contact-card"
+              className="hero-contact-card hero-contact-card-call"
               href={TRIO_PHONE_TEL}
               aria-label={`Call TRIO HIMS at ${TRIO_PHONE_DISPLAY}`}
             >
-              <span className="hero-contact-icon" aria-hidden="true">
+              <span className="hero-contact-icon hero-icon-call" aria-hidden="true">
                 <i className="bi bi-telephone-fill"></i>
               </span>
               <span className="hero-contact-copy">
@@ -236,11 +256,11 @@ export default function Hero({ onOpenModal, scrolled }) {
             </a>
 
             <a
-              className="hero-contact-card"
+              className="hero-contact-card hero-contact-card-mail"
               href={TRIO_MAILTO}
               aria-label="Email TRIO HIMS at info@triocorporation.in"
             >
-              <span className="hero-contact-icon" aria-hidden="true">
+              <span className="hero-contact-icon hero-icon-mail" aria-hidden="true">
                 <i className="bi bi-envelope-fill"></i>
               </span>
               <span className="hero-contact-copy">
