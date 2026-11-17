@@ -102,8 +102,8 @@ export default function Navbar({ onOpenModal, scrolled: externalScrolled }) {
           <Link to="/" aria-label="TRIO HIMS home" onClick={() => setMobileMenuOpen(false)}>
             <img
               src="/assets/img/trio-logo.png"
-              alt="TRIO Corporation Pvt. Ltd."
-              title="TRIO Corporation Pvt Ltd"
+              alt="Landmark TechEdge Pvt. Ltd."
+              title="Landmark TechEdge Pvt. Ltd."
               className="trio-header-logo"
             />
           </Link>

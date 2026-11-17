@@ -25,12 +25,12 @@ export default function Footer({ onOpenModal }) {
             <Link to="/" className="d-inline-block mb-3" aria-label="TRIO HIMS Home">
               <img
                 src="/assets/img/trio-logo.png"
-                alt="TRIO Corporation Pvt. Ltd."
+                alt="Landmark TechEdge Pvt. Ltd."
                 className="trio-footer-logo"
               />
             </Link>
             <p className="footer-company-desc">
-              TRIO HIMS is a reliable hospital information management system engineered to automate healthcare operations with clinical precision, departmental interoperability, and zero revenue leakage.
+              Landmark TechEdge Pvt. Ltd. provides healthcare information management software, TRIO HIMS, tailored to healthcare centre requirements. Our team of experts with enormous experience in the healthcare industry is wholeheartedly dedicated to providing secure, reliable, and cost-effective IT solutions to simplify hospital operational tasks.
             </p>
             <div className="footer-social-row d-flex align-items-center gap-2 mt-4">
               <a
@@ -159,7 +159,7 @@ export default function Footer({ onOpenModal }) {
         {/* Bottom Bar */}
         <div className="footer-bottom-bar d-flex flex-wrap justify-content-between align-items-center pt-4 border-top">
           <p className="footer-copyright mb-0">
-            © {new Date().getFullYear()} <strong>TRIO Corporation Pvt. Ltd.</strong> All Rights Reserved. Simplifying Tomorrow.
+            © 2026 Landmark TechEdge Pvt. Ltd.. All rights reserved. · CIN U72900PN2014PTC151180
           </p>
           <div className="footer-bottom-badges d-flex align-items-center gap-3">
             <span className="footer-iso-badge">ISO 9001:2015 Healthcare IT Certified</span>
