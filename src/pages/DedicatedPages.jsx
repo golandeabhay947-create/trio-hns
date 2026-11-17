@@ -58,7 +58,7 @@ export function HomePage({ scrolled, onOpenModal }) {
   return (
     <>
       <Hero scrolled={scrolled} onOpenModal={onOpenModal} />
-      <HomePagePreviews />
+      <HomePagePreviews onOpenModal={onOpenModal} />
       <section id="company-intro" className="company-intro-section">
         <div className="container">
           <CompanyIntro />

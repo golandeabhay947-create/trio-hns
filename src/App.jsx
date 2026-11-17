@@ -90,15 +90,36 @@ export default function App() {
     };
   }, []);
 
+  // Prevent background scrolling when modal is open
   useEffect(() => {
-    if (window.__lenis) {
-      if (isModalOpen) {
-        window.__lenis.stop();
-      } else {
-        window.__lenis.start();
-      }
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+      if (window.__lenis) window.__lenis.stop();
+    } else {
+      document.body.style.overflow = '';
+      if (window.__lenis) window.__lenis.start();
     }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isModalOpen]);
+
+  // Automatic Book Demo Popup on First Website Entry (Controlled via sessionStorage)
+  useEffect(() => {
+    try {
+      const hasSeenPopup = sessionStorage.getItem('trio_hims_demo_popup_shown');
+      if (!hasSeenPopup) {
+        // Elegant 1.2s delay on initial entry so hero visuals load first
+        const popupTimer = setTimeout(() => {
+          setIsModalOpen(true);
+          sessionStorage.setItem('trio_hims_demo_popup_shown', 'true');
+        }, 1200);
+        return () => clearTimeout(popupTimer);
+      }
+    } catch (_) {
+      // Graceful fallback if storage is restricted
+    }
+  }, []);
 
   useEffect(() => {
     if (location.hash) return;

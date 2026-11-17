@@ -55,7 +55,7 @@ function SectionLink({ to, children, className = '' }) {
   );
 }
 
-export default function HomePagePreviews() {
+export default function HomePagePreviews({ onOpenModal }) {
   const previewTestimonials = testimonialsData.slice(0, 3);
   const abhaModule = modulesData.find((m) => m.id === 19);
   const previewModules = [
@@ -71,6 +71,48 @@ export default function HomePagePreviews() {
     <div className="home-previews">
       <section className="home-preview-section home-preview-why" aria-labelledby="home-preview-why-title">
         <div className="container">
+          {/* Executive Healthcare Trust Highlights for Hospital Decision Makers */}
+          <div className="home-exec-trust-strip mb-4" aria-label="TRIO HIMS Key Healthcare Highlights">
+            <div className="home-exec-trust-grid">
+              <div className="home-exec-trust-item">
+                <div className="home-exec-trust-icon">
+                  <i className="bi bi-hospital"></i>
+                </div>
+                <div>
+                  <h4 className="home-exec-trust-title">27+ Unified Modules</h4>
+                  <p className="home-exec-trust-desc">Complete OPD, IPD, OT, LIS &amp; Pharmacy integration</p>
+                </div>
+              </div>
+              <div className="home-exec-trust-item">
+                <div className="home-exec-trust-icon">
+                  <i className="bi bi-cash-stack"></i>
+                </div>
+                <div>
+                  <h4 className="home-exec-trust-title">Zero Revenue Leakage</h4>
+                  <p className="home-exec-trust-desc">Cashless TPA claims &amp; 2-way Tally ERP finance sync</p>
+                </div>
+              </div>
+              <div className="home-exec-trust-item">
+                <div className="home-exec-trust-icon">
+                  <i className="bi bi-shield-check"></i>
+                </div>
+                <div>
+                  <h4 className="home-exec-trust-title">ABDM M1-M3 &amp; NABH Ready</h4>
+                  <p className="home-exec-trust-desc">Instant ABHA card creation &amp; clinical audit trails</p>
+                </div>
+              </div>
+              <div className="home-exec-trust-item">
+                <div className="home-exec-trust-icon">
+                  <i className="bi bi-headset"></i>
+                </div>
+                <div>
+                  <h4 className="home-exec-trust-title">24/7 Dedicated Support</h4>
+                  <p className="home-exec-trust-desc">Rapid 5-7 day hospital rollout &amp; 99.98% uptime SLA</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="home-why-outer-card">
             <div className="home-preview-heading home-why-heading text-center">
               <div className="home-why-eyebrow" aria-label="Why Choose TRIO">
@@ -109,10 +151,20 @@ export default function HomePagePreviews() {
               ))}
             </div>
 
-            <div className="home-why-cta-wrap text-center">
+            <div className="home-why-cta-wrap home-dual-cta-row text-center">
               <SectionLink to="/why-choose-trio" className="btn-google-pill home-why-cta">
                 See Why Choose Us
               </SectionLink>
+              {onOpenModal && (
+                <button
+                  type="button"
+                  className="btn-book-demo-pill"
+                  onClick={onOpenModal}
+                >
+                  <i className="bi bi-lightning-charge-fill"></i>
+                  <span>Book Free Hospital Demo</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -154,10 +206,20 @@ export default function HomePagePreviews() {
                 ))}
               </ul>
             </div>
-            <div className="home-preview-actions home-modules-cta-row">
+            <div className="home-preview-actions home-dual-cta-row home-modules-cta-row">
               <SectionLink to="/hospital-modules" className="btn-google-pill">
                 See All 19 Modules
               </SectionLink>
+              {onOpenModal && (
+                <button
+                  type="button"
+                  className="btn-book-demo-pill"
+                  onClick={onOpenModal}
+                >
+                  <i className="bi bi-calendar2-check"></i>
+                  <span>Schedule Module Walkthrough</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -168,7 +230,7 @@ export default function HomePagePreviews() {
       <section className="home-preview-section home-preview-trusted" aria-label="Trusted by healthcare partners">
         <div className="container">
           <div className="home-trusted-animation">
-            <TrustedBy />
+            <TrustedBy showReviews={false} />
           </div>
           <p className="home-preview-intro home-trusted-intro">
             A selection of healthcare organizations featured in the TRIO HIMS partner showcase.
@@ -289,10 +351,20 @@ export default function HomePagePreviews() {
               </div>
             </div>
 
-            <div className="home-preview-actions mt-3">
+            <div className="home-preview-actions home-dual-cta-row mt-3">
               <SectionLink to="/workflows" className="btn-google-pill">
                 Explore Full Workflows & Architecture
               </SectionLink>
+              {onOpenModal && (
+                <button
+                  type="button"
+                  className="btn-book-demo-pill"
+                  onClick={onOpenModal}
+                >
+                  <i className="bi bi-play-circle-fill"></i>
+                  <span>Request Live Workflow Demo</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

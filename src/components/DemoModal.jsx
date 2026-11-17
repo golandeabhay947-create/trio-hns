@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { submitDemoRequest } from '../lib/submitDemoRequest';
 
@@ -14,12 +14,68 @@ export default function DemoModal({ isOpen, onClose }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
+  const companyInputRef = useRef(null);
+
+  // Close on Escape key press
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  // Autofocus when modal opens
+  useEffect(() => {
+    if (isOpen && !submitted) {
+      const timer = setTimeout(() => {
+        companyInputRef.current?.focus();
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, submitted]);
 
   if (!isOpen) return null;
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Please enter your full name.';
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters.';
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      newErrors.email = 'Please enter your official email.';
+    } else if (!emailRegex.test(formData.email.trim())) {
+      newErrors.email = 'Please enter a valid email address (e.g. doctor@hospital.org).';
+    }
+
+    const phoneClean = formData.phone.replace(/[\s\-\(\)\+]/g, '');
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Please enter your mobile or phone number.';
+    } else if (phoneClean.length < 8) {
+      newErrors.phone = 'Please enter a valid phone number (at least 8-10 digits).';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -28,10 +84,10 @@ export default function DemoModal({ isOpen, onClose }) {
         subject: `TRIO HIMS Live Demo Request: ${formData.company || formData.name}`,
         formData: {
           Company: formData.company || 'Not provided',
-          'Your Name': formData.name,
-          'Your Email': formData.email,
-          'Your Phone': formData.phone,
-          'Hospital Notes / Requirements': formData.notes || 'None provided'
+          'Your Name': formData.name.trim(),
+          'Your Email': formData.email.trim(),
+          'Your Phone': formData.phone.trim(),
+          'Hospital Notes / Requirements': formData.notes.trim() || 'None provided'
         },
         honeyPot: botTrap
       });
@@ -53,14 +109,30 @@ export default function DemoModal({ isOpen, onClose }) {
   const handleClose = () => {
     setSubmitted(false);
     setError('');
+    setErrors({});
     setLoading(false);
     onClose();
   };
 
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
+
   return (
-    <div className="modal-overlay" onClick={handleClose} role="dialog" aria-modal="true" aria-labelledby="demo-modal-title">
-      <div className="modal-dialog-box demo-modal-card" onClick={(e) => e.stopPropagation()}>
-        
+    <div
+      className="modal-overlay"
+      onClick={handleClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="demo-modal-title"
+    >
+      <div
+        className="modal-dialog-box demo-modal-card"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Brand Header with New TRIO HIMS Logo */}
         <div className="demo-modal-brand-strip">
           <div className="demo-modal-logo-wrap">
@@ -70,11 +142,11 @@ export default function DemoModal({ isOpen, onClose }) {
               className="demo-modal-brand-logo"
             />
           </div>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="modal-close-btn"
             onClick={handleClose}
-            title="Close dialog"
+            title="Close dialog (Esc)"
             aria-label="Close dialog"
           >
             <i className="bi bi-x-lg"></i>
@@ -120,7 +192,7 @@ export default function DemoModal({ isOpen, onClose }) {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="modal-form-layout" noValidate={false}>
+          <form onSubmit={handleSubmit} className="modal-form-layout" noValidate>
             <div className="modal-body-google">
               {/* Invisible spam protection bot trap */}
               <div style={{ display: 'none', position: 'absolute', left: '-9999px' }} aria-hidden="true">
@@ -155,18 +227,18 @@ export default function DemoModal({ isOpen, onClose }) {
                 <div className="col-12">
                   <div className="google-field-group">
                     <label className="google-field-label" htmlFor="demo-field-company">
-                      Company
+                      Hospital / Clinic / Company
                     </label>
                     <div className="google-input-box">
                       <i className="bi bi-building google-input-icon"></i>
                       <input
+                        ref={companyInputRef}
                         id="demo-field-company"
                         type="text"
                         className="google-text-input"
-                        placeholder="Hospital / Healthcare Clinic Name"
+                        placeholder="e.g. Apollo Multi-Speciality Hospital"
                         value={formData.company}
-                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        autoFocus
+                        onChange={(e) => handleInputChange('company', e.target.value)}
                       />
                     </div>
                   </div>
@@ -178,18 +250,22 @@ export default function DemoModal({ isOpen, onClose }) {
                     <label className="google-field-label" htmlFor="demo-field-name">
                       Your Name <span className="text-danger">*</span>
                     </label>
-                    <div className="google-input-box">
+                    <div className={`google-input-box ${errors.name ? 'has-error' : ''}`}>
                       <i className="bi bi-person google-input-icon"></i>
                       <input
                         id="demo-field-name"
                         type="text"
-                        className="google-text-input"
+                        className={`google-text-input ${errors.name ? 'is-invalid-border' : ''}`}
                         placeholder="Dr. / Mr. / Ms. Full Name"
-                        required
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
                       />
                     </div>
+                    {errors.name && (
+                      <span className="google-inline-field-error text-danger fs-8 mt-1 d-block">
+                        <i className="bi bi-exclamation-circle me-1"></i>{errors.name}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -199,18 +275,22 @@ export default function DemoModal({ isOpen, onClose }) {
                     <label className="google-field-label" htmlFor="demo-field-email">
                       Your Email <span className="text-danger">*</span>
                     </label>
-                    <div className="google-input-box">
+                    <div className={`google-input-box ${errors.email ? 'has-error' : ''}`}>
                       <i className="bi bi-envelope google-input-icon"></i>
                       <input
                         id="demo-field-email"
                         type="email"
-                        className="google-text-input"
+                        className={`google-text-input ${errors.email ? 'is-invalid-border' : ''}`}
                         placeholder="doctor@hospital.org"
-                        required
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
                       />
                     </div>
+                    {errors.email && (
+                      <span className="google-inline-field-error text-danger fs-8 mt-1 d-block">
+                        <i className="bi bi-exclamation-circle me-1"></i>{errors.email}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -218,20 +298,24 @@ export default function DemoModal({ isOpen, onClose }) {
                 <div className="col-12">
                   <div className="google-field-group">
                     <label className="google-field-label" htmlFor="demo-field-phone">
-                      Your Phone <span className="text-danger">*</span>
+                      Your Phone / Mobile <span className="text-danger">*</span>
                     </label>
-                    <div className="google-input-box">
+                    <div className={`google-input-box ${errors.phone ? 'has-error' : ''}`}>
                       <i className="bi bi-telephone google-input-icon"></i>
                       <input
                         id="demo-field-phone"
                         type="tel"
-                        className="google-text-input"
+                        className={`google-text-input ${errors.phone ? 'is-invalid-border' : ''}`}
                         placeholder="10-digit mobile number (e.g. 98765 43210)"
-                        required
                         value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
                       />
                     </div>
+                    {errors.phone && (
+                      <span className="google-inline-field-error text-danger fs-8 mt-1 d-block">
+                        <i className="bi bi-exclamation-circle me-1"></i>{errors.phone}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -239,7 +323,7 @@ export default function DemoModal({ isOpen, onClose }) {
                 <div className="col-12">
                   <div className="google-field-group">
                     <label className="google-field-label" htmlFor="demo-field-notes">
-                      Hospital Notes / Requirements
+                      Hospital Notes / Specific Requirements
                     </label>
                     <div className="google-input-box">
                       <i className="bi bi-file-earmark-medical google-input-icon" style={{ top: '12px' }}></i>
@@ -249,14 +333,19 @@ export default function DemoModal({ isOpen, onClose }) {
                         rows={3}
                         placeholder="Bed capacity, key modules needed (OPD, IPD, LIS, Pharmacy), or specific workflows..."
                         value={formData.notes}
-                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                        onChange={(e) => handleInputChange('notes', e.target.value)}
                       />
                     </div>
                   </div>
                 </div>
               </div>
 
-              {error ? <p className="demo-form-error mt-2" role="alert">{error}</p> : null}
+              {error ? (
+                <div className="alert alert-danger py-2 px-3 fs-8 mt-2 mb-0" role="alert">
+                  <i className="bi bi-exclamation-triangle-fill me-1.5"></i>
+                  {error}
+                </div>
+              ) : null}
             </div>
 
             {/* Actions Footer */}
@@ -289,7 +378,6 @@ export default function DemoModal({ isOpen, onClose }) {
             </div>
           </form>
         )}
-
       </div>
     </div>
   );

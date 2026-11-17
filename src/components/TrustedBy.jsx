@@ -227,7 +227,7 @@ function createCardTexture(partner) {
   return texture;
 }
 
-export default function TrustedBy() {
+export default function TrustedBy({ showReviews = true } = {}) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const sectionRef = useRef(null);
@@ -622,7 +622,7 @@ export default function TrustedBy() {
             VERIFIED CLINICIAN REVIEWS & TESTIMONIALS SECTION
             Directly below rotating circular animation (matching image_98affa.png)
             ========================================================= */}
-        <ClinicianReviewsSection />
+        {showReviews && <ClinicianReviewsSection />}
 
         <ul className="visually-hidden">
           {PARTNERS.map((partner) => (
